@@ -11,6 +11,7 @@ import Lenis from 'lenis';
 
 export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lenisRef = useRef(null);
 
   // Initialize Lenis smooth scroll
@@ -60,9 +61,9 @@ export default function App() {
     };
   }, []);
 
-  // Lock scrolling when lightbox is active
+  // Lock scrolling when lightbox or mobile menu is active
   useEffect(() => {
-    if (lightboxImage) {
+    if (lightboxImage || isMenuOpen) {
       document.body.style.overflow = 'hidden';
       if (lenisRef.current) lenisRef.current.stop();
     } else {
@@ -73,27 +74,42 @@ export default function App() {
       document.body.style.overflow = '';
       if (lenisRef.current) lenisRef.current.start();
     };
-  }, [lightboxImage]);
+  }, [lightboxImage, isMenuOpen]);
 
   return (
     <div className="min-h-screen bg-dark text-parchment relative font-light leading-[1.7]">
       {/* Navigation */}
-      <Navbar />
+      <Navbar isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
 
-      {/* Hero Canvas sequence */}
-      <Hero />
+      {/* Page Content Wrapper (with blur & scale down transition when menu is open) */}
+      <div
+        className={`transition-all duration-500 origin-center ${
+          isMenuOpen ? 'blur-md scale-[0.99] pointer-events-none' : ''
+        }`}
+      >
+        {/* Hero Canvas sequence */}
+        <Hero />
 
-      {/* Main Sections */}
-      <main>
-        <StorySection />
-        <MenuSection />
-        <SpaceSection onImageClick={setLightboxImage} />
-        <KitchenSection onImageClick={setLightboxImage} />
-        <VisitSection />
-      </main>
+        {/* Main Sections */}
+        <main>
+          <StorySection />
+          <MenuSection />
+          <SpaceSection onImageClick={setLightboxImage} />
+          <KitchenSection onImageClick={setLightboxImage} />
+          <VisitSection />
+        </main>
 
-      {/* Footer */}
-      <Footer />
+        {/* Footer */}
+        <Footer />
+      </div>
+
+      {/* Full-screen Backdrop Overlay for Mobile Menu */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-[999] backdrop-blur-overlay md:hidden cursor-pointer"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
 
       {/* Lightbox Modal */}
       {lightboxImage && (

@@ -144,3 +144,15 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* Custom backdrop blur helpers with -webkit prefixes for cross-browser compatibility */
+.mobile-menu-blur {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.backdrop-blur-overlay {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+
