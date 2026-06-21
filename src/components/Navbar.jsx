@@ -21,9 +21,9 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-[5vw] py-[14px] transition-all duration-500 ease-out border-b ${
+      className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-[5vw] py-[14px] transition-all duration-400 border-b ${
         isSolid
-          ? 'bg-[#1a1208]/80 backdrop-blur-[12px] border-royalLine shadow-[0_10px_30px_-15px_rgba(15,10,4,0.7)]'
+          ? 'bg-[#1a1208]/92 backdrop-blur-[12px] border-royalLine'
           : 'bg-transparent border-transparent'
       }`}
     >

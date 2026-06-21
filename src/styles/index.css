@@ -45,34 +45,11 @@ body::after {
   background-size: 200px;
 }
 
-/* Lenis smooth scrolling compatibility */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
-
 /* Scroll reveal classes */
 .reveal {
   opacity: 0;
-  transform: translateY(45px);
-  transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, opacity;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal.in {
@@ -95,20 +72,6 @@ html.lenis body {
 .reveal-d4 {
   transition-delay: 0.4s;
 }
-
-/* Helper support classes */
-.will-change-transform {
-  will-change: transform;
-}
-
-.will-change-opacity {
-  will-change: opacity;
-}
-
-.transition-transform-cubic {
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 
 /* Lightbox zoom animations */
 @keyframes zoomIn {

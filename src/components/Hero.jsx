@@ -9,10 +9,6 @@ export default function Hero() {
   const textOverlayRef = useRef(null);
   const framesRef = useRef([]);
 
-  const logoRef = useRef(null);
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -74,6 +70,7 @@ export default function Hero() {
 
       requestAnimationFrame(() => {
         const container = containerRef.current;
+        const textOverlay = textOverlayRef.current;
         if (!container) {
           rafPending = false;
           return;
@@ -87,39 +84,14 @@ export default function Hero() {
         currentFrameIndex = frameIndex;
         drawFrame(frameIndex);
 
-        // Responsive Parallax Intensity Multiplier
-        const width = window.innerWidth;
-        let intensity = 1.0;
-        if (width <= 768) {
-          intensity = 0.25; // Reduce to 25% on mobile
-        } else if (width <= 1024) {
-          intensity = 0.6;  // Reduce to 60% on tablet
-        }
-
-        // Parallax calculations using hardware accelerated translates
-        const canvasY = scrollTop * 0.3 * intensity;
-        const logoY = scrollTop * 0.55 * intensity;
-        const logoScale = Math.max(1 - progress * 0.2 * intensity, 0.8);
-        
-        const titleY = scrollTop * 0.72 * intensity;
-        const titleOpacity = Math.max(1 - progress * 3.3, 0);
-
-        const subtitleY = scrollTop * 0.8 * intensity;
-        const subtitleOpacity = Math.max(1 - progress * 2.8, 0);
-
-        // Apply styles directly for extreme 60fps performance
-        canvas.style.transform = `translate3d(0, ${canvasY}px, 0)`;
-
-        if (logoRef.current) {
-          logoRef.current.style.transform = `translate3d(0, ${logoY}px, 0) scale(${logoScale})`;
-        }
-        if (titleRef.current) {
-          titleRef.current.style.transform = `translate3d(0, ${titleY}px, 0)`;
-          titleRef.current.style.opacity = String(titleOpacity);
-        }
-        if (subtitleRef.current) {
-          subtitleRef.current.style.transform = `translate3d(0, ${subtitleY}px, 0)`;
-          subtitleRef.current.style.opacity = String(subtitleOpacity);
+        if (textOverlay) {
+          textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
+          if (window.innerWidth > 768) {
+            const translateY = progress * -120;
+            textOverlay.style.transform = `translate(-50%, calc(-50% + ${translateY}px))`;
+          } else {
+            textOverlay.style.transform = 'translate(-50%, -50%)';
+          }
         }
 
         rafPending = false;
@@ -146,31 +118,25 @@ export default function Hero() {
   return (
     <div id="hero-scroll-container" ref={containerRef} className="relative h-[500vh]">
       <div id="hero-sticky" className="sticky top-0 h-screen overflow-hidden">
-        <canvas id="hero-canvas" ref={canvasRef} className="absolute top-0 left-0 w-full h-full block will-change-transform" />
+        <canvas id="hero-canvas" ref={canvasRef} className="absolute top-0 left-0 w-full h-full block" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1208]/35 via-[#1a1208]/08 to-[#1a1208]/55 z-[1] pointer-events-none" />
         <div
           id="hero-text-overlay"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] pointer-events-none"
+          ref={textOverlayRef}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
         >
           <img
-            ref={logoRef}
             src="/valanam-new-logo.png"
             alt="Valanam Logo"
-            className="h-[160px] w-auto mx-auto mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)] will-change-transform"
+            className="h-[160px] w-auto mx-auto mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
           />
-          <div
-            ref={titleRef}
-            className="font-playfair text-[clamp(2.8rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)] will-change-transform will-change-opacity"
-          >
+          <div className="font-playfair text-[clamp(2.8rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
             VALANAM
           </div>
-          <div
-            ref={subtitleRef}
-            className="font-playfair italic text-[clamp(0.95rem,2vw,1.3rem)] text-amber mt-4 drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)] will-change-transform will-change-opacity"
-          >
+          <div className="font-playfair italic text-[clamp(0.95rem,2vw,1.3rem)] text-amber mt-4 drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)]">
             Where stories simmer, and flavors linger.
           </div>
         </div>
