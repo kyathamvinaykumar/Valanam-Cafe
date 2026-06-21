@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import StorySection from './components/StorySection';
@@ -7,10 +7,33 @@ import SpaceSection from './components/SpaceSection';
 import KitchenSection from './components/KitchenSection';
 import VisitSection from './components/VisitSection';
 import Footer from './components/Footer';
-import ParallaxBanner from './components/ParallaxBanner';
+import Lenis from 'lenis';
 
 export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
+  const lenisRef = useRef(null);
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
+      smoothWheel: true,
+      smoothTouch: false,
+    });
+    lenisRef.current = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   // Scroll reveal observer
   useEffect(() => {
@@ -41,11 +64,14 @@ export default function App() {
   useEffect(() => {
     if (lightboxImage) {
       document.body.style.overflow = 'hidden';
+      if (lenisRef.current) lenisRef.current.stop();
     } else {
       document.body.style.overflow = '';
+      if (lenisRef.current) lenisRef.current.start();
     }
     return () => {
       document.body.style.overflow = '';
+      if (lenisRef.current) lenisRef.current.start();
     };
   }, [lightboxImage]);
 
@@ -60,21 +86,7 @@ export default function App() {
       {/* Main Sections */}
       <main>
         <StorySection />
-        
-        <ParallaxBanner backgroundImage="/ambience/photo_2026-05-02_17-15-45.jpg">
-          <div className="reveal font-playfair text-[clamp(1.2rem,2vw,1.8rem)] text-parchment italic drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-            "A quiet cloud that gathers people under shelter."
-          </div>
-        </ParallaxBanner>
-
         <MenuSection />
-
-        <ParallaxBanner backgroundImage="/ambience/photo_1_2026-05-02_17-24-30.jpg">
-          <div className="reveal font-playfair text-[clamp(1.2rem,2vw,1.8rem)] text-parchment italic drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-            "Terracotta underfoot. Lattice wood at your shoulder."
-          </div>
-        </ParallaxBanner>
-
         <SpaceSection onImageClick={setLightboxImage} />
         <KitchenSection onImageClick={setLightboxImage} />
         <VisitSection />

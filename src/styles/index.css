@@ -57,20 +57,36 @@ body::after {
   transform: translateY(0);
 }
 
+/* Specific smooth "soft pop" scroll reveal for images */
+img.reveal {
+  transform: scale(0.96);
+  opacity: 0;
+  transition: none; /* override default translation transitions */
+  will-change: transform, opacity;
+}
+
+img.reveal.in {
+  animation: softPop 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .reveal-d1 {
   transition-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 
 .reveal-d2 {
   transition-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .reveal-d3 {
   transition-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 .reveal-d4 {
   transition-delay: 0.4s;
+  animation-delay: 0.4s;
 }
 
 /* Lightbox zoom animations */
@@ -89,12 +105,42 @@ body::after {
   animation: zoomIn 0.3s ease;
 }
 
-/* Parallax banner background attachment rules */
-.parallax-banner-container {
-  background-attachment: scroll;
-}
-@media (min-width: 769px) {
-  .parallax-banner-container {
-    background-attachment: fixed;
+/* Soft pop keyframes for enters, peak scale, and settle */
+@keyframes softPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  45% {
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0);
   }
 }
+
+/* Lenis smooth scrolling styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+

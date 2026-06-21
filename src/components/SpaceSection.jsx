@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 
 const AMBIENCE_IMAGES = [
   { src: '/ambience/photo_1_2026-05-02_16-47-07.jpg', delay: '' },
@@ -13,60 +13,19 @@ const AMBIENCE_IMAGES = [
 ];
 
 export default function SpaceSection({ onImageClick }) {
-  const sectionRef = useRef(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
-  const [hoveredIdx, setHoveredIdx] = useState(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerWidth <= 768) {
-        setScrollOffset(0);
-        return;
-      }
-      const section = sectionRef.current;
-      if (!section) return;
-
-      const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      if (rect.top < viewportHeight && rect.bottom > 0) {
-        const sectionCenter = rect.top + rect.height / 2;
-        const viewportCenter = viewportHeight / 2;
-        const distance = sectionCenter - viewportCenter;
-        setScrollOffset(distance);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const getTranslateY = (idx) => {
-    if (window.innerWidth <= 768) return 0;
-    const factor = idx % 2 === 0 ? -0.05 : 0.03;
-    return scrollOffset * factor;
-  };
-
   return (
     <>
-      <section className="bg-espresso px-6 py-[clamp(60px,10vh,100px)]" id="space" ref={sectionRef}>
+      <hr className="border-none border-t border-royalLine m-0" />
+      <section className="bg-espresso px-6 py-[clamp(60px,10vh,100px)]" id="space">
         <div className="flex flex-col min-[901px]:flex-row gap-[60px] max-w-[1200px] mx-auto items-start">
           <div className="flex-[1.4] columns-1 md:columns-2 gap-2">
             {AMBIENCE_IMAGES.map((img, idx) => (
               <img
                 key={idx}
-                className={`reveal ${img.delay} inline-block w-full mb-2 object-cover rounded-[4px] break-inside-avoid cursor-pointer`}
+                className={`reveal ${img.delay} inline-block w-full mb-2 object-cover rounded-[4px] break-inside-avoid cursor-pointer transition-transform duration-300 hover:scale-[1.02]`}
                 src={img.src}
                 alt="Ambience"
                 loading="lazy"
-                style={{
-                  transform: `translateY(${getTranslateY(idx)}px) scale(${hoveredIdx === idx ? 1.02 : 1})`,
-                  transition: 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1)',
-                }}
-                onMouseEnter={() => setHoveredIdx(idx)}
-                onMouseLeave={() => setHoveredIdx(null)}
                 onClick={() => onImageClick(img.src)}
               />
             ))}

@@ -37,6 +37,7 @@ const MENU_DATA = [
 export default function MenuSection() {
   return (
     <>
+      <hr className="border-none border-t border-royalLine m-0" />
       <section className="bg-espresso px-6 py-[clamp(60px,10vh,100px)]" id="menu">
         <div className="text-center">
           <h2 className="reveal font-playfair text-[clamp(1.8rem,3vw,2.5rem)] text-parchment mb-2">
