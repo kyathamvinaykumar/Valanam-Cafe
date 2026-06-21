@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const AMBIENCE_IMAGES = [
   { src: '/ambience/photo_1_2026-05-02_16-47-07.jpg', delay: '' },
@@ -13,24 +13,81 @@ const AMBIENCE_IMAGES = [
 ];
 
 export default function SpaceSection({ onImageClick }) {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    let rafId;
+
+    const handleScroll = () => {
+      const section = sectionRef.current;
+      if (!section) return;
+
+      const rect = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Only perform parallax updates if section is inside viewport
+      if (rect.top < viewportHeight && rect.bottom > 0) {
+        const scrolledIntoView = viewportHeight - rect.top;
+        const isMobile = window.innerWidth <= 768;
+        
+        // Multiplier to limit translation values
+        const intensity = isMobile ? 0.015 : 0.055;
+
+        // Query container elements
+        const items = section.querySelectorAll('.space-masonry-container');
+        items.forEach((item, idx) => {
+          // Stagger speed and alternate direction
+          const direction = idx % 2 === 0 ? 1 : -1;
+          const speed = 0.12 + (idx % 3) * 0.06;
+          const yTranslate = scrolledIntoView * intensity * speed * direction;
+
+          item.style.transform = `translate3d(0, ${yTranslate}px, 0)`;
+        });
+      }
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
     <>
       <hr className="border-none border-t border-royalLine m-0" />
-      <section className="bg-espresso px-6 py-[clamp(60px,10vh,100px)]" id="space">
+      <section
+        ref={sectionRef}
+        className="bg-espresso px-6 py-[clamp(60px,10vh,100px)] overflow-hidden"
+        id="space"
+      >
         <div className="flex flex-col min-[901px]:flex-row gap-[60px] max-w-[1200px] mx-auto items-start">
+          
+          {/* Gallery Masonry */}
           <div className="flex-[1.4] columns-1 md:columns-2 gap-2">
             {AMBIENCE_IMAGES.map((img, idx) => (
-              <img
+              <div
                 key={idx}
-                className={`reveal ${img.delay} inline-block w-full mb-2 object-cover rounded-[4px] break-inside-avoid cursor-pointer transition-transform duration-300 hover:scale-[1.02]`}
-                src={img.src}
-                alt="Ambience"
-                loading="lazy"
-                onClick={() => onImageClick(img.src)}
-              />
+                className="space-masonry-container inline-block w-full mb-2 overflow-hidden rounded-[4px] break-inside-avoid will-change-transform"
+              >
+                <img
+                  className={`reveal ${img.delay} block w-full h-auto object-cover cursor-pointer transition-transform duration-500 ease-out hover:scale-[1.05]`}
+                  src={img.src}
+                  alt="Ambience"
+                  loading="lazy"
+                  onClick={() => onImageClick(img.src)}
+                />
+              </div>
             ))}
           </div>
-          <div className="flex-1 pl-0 min-[901px]:pl-5">
+
+          {/* Sticky Text Panel */}
+          <div className="flex-1 pl-0 min-[901px]:pl-5 min-[901px]:sticky min-[901px]:top-[120px] self-start">
             <h2 className="reveal font-playfair text-[clamp(1.6rem,2.5vw,2rem)] text-parchment mb-6">
               The Space
             </h2>
@@ -66,6 +123,7 @@ export default function SpaceSection({ onImageClick }) {
               </svg>
             </a>
           </div>
+
         </div>
       </section>
     </>

@@ -58,7 +58,7 @@ export default function MenuSection() {
                 {cat.items.map((item, itemIdx) => (
                   <div
                     key={itemIdx}
-                    className={`reveal ${item.delay} bg-clay border-t-2 border-amber rounded-[4px] px-6 py-7 transition-[border-color,transform] duration-300 hover:border-parchment hover:-translate-y-1 cursor-default`}
+                    className={`reveal ${item.delay} bg-clay border-t-2 border-amber rounded-[4px] px-6 py-7 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-parchment hover:-translate-y-2 hover:scale-[1.015] hover:shadow-[0_15px_35px_-10px_rgba(201,132,58,0.18)] cursor-default`}
                   >
                     <h3 className="font-playfair text-[1.15rem] text-parchment mb-2">
                       {item.title}

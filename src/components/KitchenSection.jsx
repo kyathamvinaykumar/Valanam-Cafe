@@ -30,24 +30,26 @@ const DESSERTS_IMAGES = [
 ];
 
 export default function KitchenSection({ onImageClick }) {
-  const [activeTab, setActiveTab] = useState('food'); // Default active tab is 'food'
+  const [activeTab, setActiveTab] = useState('food');
 
   const tabClass = (tabId) =>
-    `font-inter text-[0.85rem] tracking-[0.15em] uppercase px-7 py-2.5 bg-transparent border-none outline-none cursor-pointer transition-all duration-200 border-b-2 ${
+    `font-inter text-[0.85rem] tracking-[0.15em] uppercase px-7 py-2.5 bg-transparent border-none outline-none cursor-pointer transition-all duration-300 border-b-2 ${
       activeTab === tabId
         ? 'text-amber opacity-100 border-amber'
         : 'text-parchment opacity-50 border-transparent hover:text-parchment hover:opacity-80'
     }`;
 
   const gridClass = (tabId) =>
-    `grid grid-cols-1 min-[601px]:grid-cols-2 min-[901px]:grid-cols-3 gap-2.5 mt-10 max-w-[1200px] mx-auto ${
-      activeTab === tabId ? '' : 'hidden'
+    `grid grid-cols-1 min-[601px]:grid-cols-2 min-[901px]:grid-cols-3 gap-2.5 w-full transition-all duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] transform ${
+      activeTab === tabId
+        ? 'opacity-100 scale-100 pointer-events-auto relative z-10'
+        : 'opacity-0 scale-98 pointer-events-none absolute inset-x-0 top-0 -z-10'
     }`;
 
   return (
     <>
       <hr className="border-none border-t border-royalLine m-0" />
-      <section className="bg-dark px-6 py-[clamp(60px,10vh,100px)]" id="kitchen">
+      <section className="bg-dark px-6 py-[clamp(60px,10vh,100px)] overflow-hidden" id="kitchen">
         <div className="text-center">
           <h2 className="reveal font-playfair text-[clamp(1.8rem,3vw,2.5rem)] text-parchment mb-2">
             From Our Kitchen
@@ -69,46 +71,52 @@ export default function KitchenSection({ onImageClick }) {
           </button>
         </div>
 
-        {/* DRINKS GRID */}
-        <div className={gridClass('drinks')}>
-          {DRINKS_IMAGES.map((img, idx) => (
-            <img
-              key={idx}
-              className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
-              src={img.src}
-              alt="Drink"
-              loading="lazy"
-              onClick={() => onImageClick(img.src)}
-            />
-          ))}
-        </div>
+        {/* Relative Container for Crossfading Grids */}
+        <div className="relative mt-10 max-w-[1200px] mx-auto min-h-[400px]">
+          {/* DRINKS GRID */}
+          <div className={gridClass('drinks')}>
+            {DRINKS_IMAGES.map((img, idx) => (
+              <div key={idx} className="overflow-hidden rounded-[4px] aspect-[4/5] w-full">
+                <img
+                  className={`reveal ${img.delay} w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.05] cursor-pointer`}
+                  src={img.src}
+                  alt="Drink"
+                  loading="lazy"
+                  onClick={() => onImageClick(img.src)}
+                />
+              </div>
+            ))}
+          </div>
 
-        {/* FOOD GRID */}
-        <div className={gridClass('food')}>
-          {FOOD_IMAGES.map((img, idx) => (
-            <img
-              key={idx}
-              className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
-              src={img.src}
-              alt="Food"
-              loading="lazy"
-              onClick={() => onImageClick(img.src)}
-            />
-          ))}
-        </div>
+          {/* FOOD GRID */}
+          <div className={gridClass('food')}>
+            {FOOD_IMAGES.map((img, idx) => (
+              <div key={idx} className="overflow-hidden rounded-[4px] aspect-[4/5] w-full">
+                <img
+                  className={`reveal ${img.delay} w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.05] cursor-pointer`}
+                  src={img.src}
+                  alt="Food"
+                  loading="lazy"
+                  onClick={() => onImageClick(img.src)}
+                />
+              </div>
+            ))}
+          </div>
 
-        {/* DESSERTS GRID */}
-        <div className={gridClass('desserts')}>
-          {DESSERTS_IMAGES.map((img, idx) => (
-            <img
-              key={idx}
-              className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
-              src={img.src}
-              alt="Dessert"
-              loading="lazy"
-              onClick={() => onImageClick(img.src)}
-            />
-          ))}
+          {/* DESSERTS GRID */}
+          <div className={gridClass('desserts')}>
+            {DESSERTS_IMAGES.map((img, idx) => (
+              <div key={idx} className="overflow-hidden rounded-[4px] aspect-[4/5] w-full">
+                <img
+                  className={`reveal ${img.delay} w-full h-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.05] cursor-pointer`}
+                  src={img.src}
+                  alt="Dessert"
+                  loading="lazy"
+                  onClick={() => onImageClick(img.src)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </>

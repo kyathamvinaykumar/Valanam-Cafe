@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import StorySection from './components/StorySection';
@@ -10,6 +11,35 @@ import Footer from './components/Footer';
 
 export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
+
+  // Initialize smooth scroll (Lenis)
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1.0,
+      smoothTouch: false, // Keep native mobile touch behavior
+      touchMultiplier: 2.0,
+    });
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+    window.lenis = lenis;
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      window.lenis = null;
+    };
+  }, []);
 
   // Scroll reveal observer
   useEffect(() => {
@@ -36,16 +66,17 @@ export default function App() {
     };
   }, []);
 
-  // Lock scrolling when lightbox is active
+  // Lock smooth scrolling when lightbox is active
   useEffect(() => {
-    if (lightboxImage) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (window.lenis) {
+      if (lightboxImage) {
+        window.lenis.stop();
+        document.body.style.overflow = 'hidden';
+      } else {
+        window.lenis.start();
+        document.body.style.overflow = '';
+      }
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [lightboxImage]);
 
   return (
