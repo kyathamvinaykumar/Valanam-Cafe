@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import HoverParallaxImage from './HoverParallaxImage';
 
 const DRINKS_IMAGES = [
   { src: '/drinks/photo_1_2026-05-02_16-45-11.jpg', delay: '' },
@@ -72,12 +73,11 @@ export default function KitchenSection({ onImageClick }) {
         {/* DRINKS GRID */}
         <div className={gridClass('drinks')}>
           {DRINKS_IMAGES.map((img, idx) => (
-            <img
+            <HoverParallaxImage
               key={idx}
-              className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
+              className={`reveal ${img.delay} w-full aspect-[4/5]`}
               src={img.src}
               alt="Drink"
-              loading="lazy"
               onClick={() => onImageClick(img.src)}
             />
           ))}
@@ -86,12 +86,11 @@ export default function KitchenSection({ onImageClick }) {
         {/* FOOD GRID */}
         <div className={gridClass('food')}>
           {FOOD_IMAGES.map((img, idx) => (
-            <img
+            <HoverParallaxImage
               key={idx}
-              className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
+              className={`reveal ${img.delay} w-full aspect-[4/5]`}
               src={img.src}
               alt="Food"
-              loading="lazy"
               onClick={() => onImageClick(img.src)}
             />
           ))}
@@ -100,12 +99,11 @@ export default function KitchenSection({ onImageClick }) {
         {/* DESSERTS GRID */}
         <div className={gridClass('desserts')}>
           {DESSERTS_IMAGES.map((img, idx) => (
-            <img
+            <HoverParallaxImage
               key={idx}
-              className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
+              className={`reveal ${img.delay} w-full aspect-[4/5]`}
               src={img.src}
               alt="Dessert"
-              loading="lazy"
               onClick={() => onImageClick(img.src)}
             />
           ))}

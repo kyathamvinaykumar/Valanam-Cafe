@@ -88,3 +88,13 @@ body::after {
 .lightbox__content {
   animation: zoomIn 0.3s ease;
 }
+
+/* Parallax banner background attachment rules */
+.parallax-banner-container {
+  background-attachment: scroll;
+}
+@media (min-width: 769px) {
+  .parallax-banner-container {
+    background-attachment: fixed;
+  }
+}

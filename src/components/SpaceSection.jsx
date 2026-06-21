@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const AMBIENCE_IMAGES = [
-  { src: '/ambience/photo_1_2026-05-02_16-47-07.jpg', delay: '', parallax: true },
-  { src: '/ambience/photo_1_2026-05-02_17-13-27.jpg', delay: 'reveal-d1', parallax: false },
-  { src: '/ambience/photo_1_2026-05-02_17-24-30.jpg', delay: 'reveal-d2', parallax: true },
-  { src: '/ambience/photo_2026-05-02_17-15-45.jpg', delay: '', parallax: false },
-  { src: '/ambience/photo_2_2026-05-02_16-47-07.jpg', delay: 'reveal-d1', parallax: true },
-  { src: '/ambience/photo_2_2026-05-02_17-13-28.jpg', delay: 'reveal-d2', parallax: false },
-  { src: '/ambience/photo_2_2026-05-02_17-24-30.jpg', delay: '', parallax: true },
-  { src: '/ambience/photo_3_2026-05-02_16-47-07.jpg', delay: 'reveal-d1', parallax: false },
-  { src: '/ambience/photo_4_2026-05-02_16-47-07.jpg', delay: 'reveal-d2', parallax: true },
+  { src: '/ambience/photo_1_2026-05-02_16-47-07.jpg', delay: '' },
+  { src: '/ambience/photo_1_2026-05-02_17-13-27.jpg', delay: 'reveal-d1' },
+  { src: '/ambience/photo_1_2026-05-02_17-24-30.jpg', delay: 'reveal-d2' },
+  { src: '/ambience/photo_2026-05-02_17-15-45.jpg', delay: '' },
+  { src: '/ambience/photo_2_2026-05-02_16-47-07.jpg', delay: 'reveal-d1' },
+  { src: '/ambience/photo_2_2026-05-02_17-13-28.jpg', delay: 'reveal-d2' },
+  { src: '/ambience/photo_2_2026-05-02_17-24-30.jpg', delay: '' },
+  { src: '/ambience/photo_3_2026-05-02_16-47-07.jpg', delay: 'reveal-d1' },
+  { src: '/ambience/photo_4_2026-05-02_16-47-07.jpg', delay: 'reveal-d2' },
 ];
 
 export default function SpaceSection({ onImageClick }) {
-  const [translateY, setTranslateY] = useState(0);
   const sectionRef = useRef(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const [hoveredIdx, setHoveredIdx] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerWidth <= 768) {
-        setTranslateY(0);
+        setScrollOffset(0);
         return;
       }
-
       const section = sectionRef.current;
       if (!section) return;
 
@@ -30,45 +30,45 @@ export default function SpaceSection({ onImageClick }) {
       const viewportHeight = window.innerHeight;
 
       if (rect.top < viewportHeight && rect.bottom > 0) {
-        const sectionTop = rect.top + window.scrollY;
-        const scrollDistance = window.scrollY + viewportHeight - sectionTop;
-        const totalDistance = rect.height + viewportHeight;
-        const progress = Math.min(Math.max(scrollDistance / totalDistance, 0), 1);
-        
-        // Subtle vertical glide (range from -35px to +35px)
-        const offset = (progress - 0.5) * -70;
-        setTranslateY(offset);
+        const sectionCenter = rect.top + rect.height / 2;
+        const viewportCenter = viewportHeight / 2;
+        const distance = sectionCenter - viewportCenter;
+        setScrollOffset(distance);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const getTranslateY = (idx) => {
+    if (window.innerWidth <= 768) return 0;
+    const factor = idx % 2 === 0 ? -0.05 : 0.03;
+    return scrollOffset * factor;
+  };
+
   return (
     <>
-      <hr className="border-none border-t border-royalLine m-0" />
-      <section ref={sectionRef} className="bg-espresso px-6 py-[clamp(60px,10vh,100px)] overflow-hidden" id="space">
+      <section className="bg-espresso px-6 py-[clamp(60px,10vh,100px)]" id="space" ref={sectionRef}>
         <div className="flex flex-col min-[901px]:flex-row gap-[60px] max-w-[1200px] mx-auto items-start">
-          <div className="flex-[1.4] columns-1 md:columns-2 gap-2 w-full">
+          <div className="flex-[1.4] columns-1 md:columns-2 gap-2">
             {AMBIENCE_IMAGES.map((img, idx) => (
-              <div
+              <img
                 key={idx}
-                className="break-inside-avoid mb-2 overflow-hidden rounded-[4px] will-change-transform"
+                className={`reveal ${img.delay} inline-block w-full mb-2 object-cover rounded-[4px] break-inside-avoid cursor-pointer`}
+                src={img.src}
+                alt="Ambience"
+                loading="lazy"
                 style={{
-                  transform: img.parallax ? `translateY(${translateY}px)` : 'none',
-                  transition: 'transform 0.1s ease-out',
+                  transform: `translateY(${getTranslateY(idx)}px) scale(${hoveredIdx === idx ? 1.02 : 1})`,
+                  transition: 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1)',
                 }}
-              >
-                <img
-                  className={`reveal ${img.delay} block w-full object-cover rounded-[4px] cursor-pointer transition-transform duration-300 hover:scale-[1.02]`}
-                  src={img.src}
-                  alt="Ambience"
-                  loading="lazy"
-                  onClick={() => onImageClick(img.src)}
-                />
-              </div>
+                onMouseEnter={() => setHoveredIdx(idx)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                onClick={() => onImageClick(img.src)}
+              />
             ))}
           </div>
           <div className="flex-1 pl-0 min-[901px]:pl-5">

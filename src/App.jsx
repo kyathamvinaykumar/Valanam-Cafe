@@ -3,11 +3,11 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import StorySection from './components/StorySection';
 import MenuSection from './components/MenuSection';
-import ParallaxBanner from './components/ParallaxBanner';
 import SpaceSection from './components/SpaceSection';
 import KitchenSection from './components/KitchenSection';
 import VisitSection from './components/VisitSection';
 import Footer from './components/Footer';
+import ParallaxBanner from './components/ParallaxBanner';
 
 export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
@@ -60,8 +60,21 @@ export default function App() {
       {/* Main Sections */}
       <main>
         <StorySection />
+        
+        <ParallaxBanner backgroundImage="/ambience/photo_2026-05-02_17-15-45.jpg">
+          <div className="reveal font-playfair text-[clamp(1.2rem,2vw,1.8rem)] text-parchment italic drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+            "A quiet cloud that gathers people under shelter."
+          </div>
+        </ParallaxBanner>
+
         <MenuSection />
-        <ParallaxBanner />
+
+        <ParallaxBanner backgroundImage="/ambience/photo_1_2026-05-02_17-24-30.jpg">
+          <div className="reveal font-playfair text-[clamp(1.2rem,2vw,1.8rem)] text-parchment italic drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+            "Terracotta underfoot. Lattice wood at your shoulder."
+          </div>
+        </ParallaxBanner>
+
         <SpaceSection onImageClick={setLightboxImage} />
         <KitchenSection onImageClick={setLightboxImage} />
         <VisitSection />

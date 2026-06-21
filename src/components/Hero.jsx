@@ -86,12 +86,6 @@ export default function Hero() {
 
         if (textOverlay) {
           textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
-          if (window.innerWidth > 768) {
-            const translateY = progress * -120;
-            textOverlay.style.transform = `translate(-50%, calc(-50% + ${translateY}px))`;
-          } else {
-            textOverlay.style.transform = 'translate(-50%, -50%)';
-          }
         }
 
         rafPending = false;
