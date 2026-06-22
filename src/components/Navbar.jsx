@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 export default function Navbar({ isOpen, setIsOpen }) {
   const [isSolid, setIsSolid] = useState(false);
@@ -12,11 +13,16 @@ export default function Navbar({ isOpen, setIsOpen }) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const closeNav = () => setIsOpen(false);
+
+  const getNavLinkClass = ({ isActive }) =>
+    `text-[0.82rem] tracking-[0.1em] uppercase transition-colors duration-300 ${
+      isActive ? 'text-amber font-medium' : 'text-parchment hover:text-amber'
+    }`;
 
   return (
     <nav
@@ -26,7 +32,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
           : 'bg-transparent border-transparent'
       }`}
     >
-      <div className="flex items-center gap-[10px]">
+      <Link to="/" className="flex items-center gap-[10px]" onClick={closeNav}>
         <img
           src="/valanam-new-logo.png"
           alt="Valanam"
@@ -43,7 +49,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
             A Fabled Kitchen
           </span>
         </div>
-      </div>
+      </Link>
 
       <ul
         className={`fixed top-0 h-screen w-[65vw] flex flex-col justify-center bg-[#0f0a04]/97 mobile-menu-blur transition-[right] duration-350 p-8 gap-10 list-none z-50 md:static md:h-auto md:w-auto md:flex-row md:bg-transparent md:backdrop-blur-none md:p-0 md:gap-8 ${
@@ -51,49 +57,29 @@ export default function Navbar({ isOpen, setIsOpen }) {
         }`}
       >
         <li>
-          <a
-            href="#story"
-            onClick={closeNav}
-            className="text-[0.82rem] tracking-[0.1em] uppercase text-parchment transition-colors duration-300 hover:text-amber"
-          >
-            Our Story
-          </a>
+          <NavLink to="/" onClick={closeNav} className={getNavLinkClass} end>
+            Home
+          </NavLink>
         </li>
         <li>
-          <a
-            href="#menu"
-            onClick={closeNav}
-            className="text-[0.82rem] tracking-[0.1em] uppercase text-parchment transition-colors duration-300 hover:text-amber"
-          >
-            Menu
-          </a>
+          <NavLink to="/gallery" onClick={closeNav} className={getNavLinkClass}>
+            Gallery
+          </NavLink>
         </li>
         <li>
-          <a
-            href="#space"
-            onClick={closeNav}
-            className="text-[0.82rem] tracking-[0.1em] uppercase text-parchment transition-colors duration-300 hover:text-amber"
-          >
-            The Space
-          </a>
+          <NavLink to="/blog" onClick={closeNav} className={getNavLinkClass}>
+            Blog
+          </NavLink>
         </li>
         <li>
-          <a
-            href="#kitchen"
-            onClick={closeNav}
-            className="text-[0.82rem] tracking-[0.1em] uppercase text-parchment transition-colors duration-300 hover:text-amber"
-          >
-            From Our Kitchen
-          </a>
-        </li>
-        <li>
-          <a
-            href="#visit"
-            onClick={closeNav}
-            className="text-[0.82rem] tracking-[0.1em] uppercase text-parchment transition-colors duration-300 hover:text-amber"
-          >
+          <NavLink to="/visit" onClick={closeNav} className={getNavLinkClass}>
             Visit Us
-          </a>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/ai" onClick={closeNav} className={getNavLinkClass}>
+            Coming Soon
+          </NavLink>
         </li>
       </ul>
 

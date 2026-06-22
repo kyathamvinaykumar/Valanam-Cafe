@@ -1,0 +1,12 @@
+import React from 'react';
+import Hero from '../components/Hero';
+import StorySection from '../components/StorySection';
+
+export default function Home() {
+  return (
+    <>
+      <Hero />
+      <StorySection />
+    </>
+  );
+}

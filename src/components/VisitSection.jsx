@@ -51,15 +51,6 @@ export default function VisitSection() {
                 </React.Fragment>
               ))}
             </div>
-
-            <a
-              className="block mt-6 text-amber font-inter text-[0.85rem] underline underline-offset-[4px] tracking-[0.05em]"
-              href="https://maps.app.goo.gl/rNxf2kxKSKkAjF8W6"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Get Directions →
-            </a>
           </div>
           <div className="reveal reveal-d2 flex flex-col items-center justify-center flex-1 pt-2.5 w-full">
             <div className="w-full max-w-[480px] h-[300px] rounded-[8px] overflow-hidden border border-royalLine relative">

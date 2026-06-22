@@ -9,6 +9,13 @@ export default function Hero() {
   const textOverlayRef = useRef(null);
   const framesRef = useRef([]);
 
+  // Refs for layout caching to avoid forced reflows (layout thrashing)
+  const canvasWidthRef = useRef(0);
+  const canvasHeightRef = useRef(0);
+  const containerHeightRef = useRef(0);
+  const currentFrameIndexRef = useRef(0);
+  const dprRef = useRef(1);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -17,14 +24,21 @@ export default function Hero() {
     ctx.imageSmoothingQuality = 'high';
 
     let lastDrawnFrame = -1;
-    let currentFrameIndex = 0;
+
+    const updateDimensions = () => {
+      const container = containerRef.current;
+      if (!canvas || !container) return;
+      canvasWidthRef.current = canvas.offsetWidth;
+      canvasHeightRef.current = canvas.offsetHeight;
+      containerHeightRef.current = container.offsetHeight;
+    };
 
     const drawFrame = (index) => {
       const img = framesRef.current[index];
       if (img && img.complete) {
-        const dpr = window.devicePixelRatio || 1;
-        const displayWidth = canvas.offsetWidth;
-        const displayHeight = canvas.offsetHeight;
+        const dpr = dprRef.current;
+        const displayWidth = canvasWidthRef.current;
+        const displayHeight = canvasHeightRef.current;
 
         let resized = false;
         if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
@@ -47,20 +61,31 @@ export default function Hero() {
       }
     };
 
-    // Preload frames
-    let loadedCount = 0;
-    const preloadFrames = (callback) => {
-      for (let i = 1; i <= FRAME_COUNT; i++) {
+    // Lazy stream preload: Load frame 1 immediately, then background stream the remaining 113 frames
+    const preloadRemainingFrames = () => {
+      for (let i = 2; i <= FRAME_COUNT; i++) {
         const img = new Image();
         img.src = FRAME_PATH(i);
         img.onload = () => {
-          loadedCount++;
-          if (loadedCount === FRAME_COUNT && callback) {
-            callback();
+          framesRef.current[i - 1] = img;
+          if (currentFrameIndexRef.current === i - 1) {
+            drawFrame(i - 1);
           }
         };
         framesRef.current[i - 1] = img;
       }
+    };
+
+    const preloadFirstFrame = () => {
+      const img = new Image();
+      img.src = FRAME_PATH(1);
+      img.onload = () => {
+        framesRef.current[0] = img;
+        drawFrame(0);
+        // Stream remaining frames asynchronously
+        preloadRemainingFrames();
+      };
+      framesRef.current[0] = img;
     };
 
     let rafPending = false;
@@ -69,23 +94,33 @@ export default function Hero() {
       rafPending = true;
 
       requestAnimationFrame(() => {
-        const container = containerRef.current;
+        const canvas = canvasRef.current;
         const textOverlay = textOverlayRef.current;
-        if (!container) {
+        const containerHeight = containerHeightRef.current;
+        if (!containerHeight) {
           rafPending = false;
           return;
         }
 
         const scrollTop = window.scrollY;
-        const maxScroll = container.offsetHeight - window.innerHeight;
+        const maxScroll = containerHeight - window.innerHeight;
         const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
         const frameIndex = Math.min(Math.floor(progress * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
         
-        currentFrameIndex = frameIndex;
+        currentFrameIndexRef.current = frameIndex;
         drawFrame(frameIndex);
 
+        if (canvas) {
+          // 90% scroll speed: translates up by 10% of scroll, capped at -150px
+          const backgroundOffset = Math.max(-scrollTop * 0.1, -150);
+          canvas.style.transform = `translate3d(0, ${backgroundOffset}px, 0)`;
+        }
+
         if (textOverlay) {
+          // 98% scroll speed: translates up by 2% of scroll
+          const textOffset = -scrollTop * 0.02;
           textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
+          textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
         }
 
         rafPending = false;
@@ -93,14 +128,17 @@ export default function Hero() {
     };
 
     const handleResize = () => {
-      drawFrame(currentFrameIndex);
+      dprRef.current = window.devicePixelRatio || 1;
+      updateDimensions();
+      drawFrame(currentFrameIndexRef.current);
     };
 
-    preloadFrames(() => {
-      drawFrame(0);
-    });
+    // Initialize dimensions and trigger first draw
+    dprRef.current = window.devicePixelRatio || 1;
+    updateDimensions();
+    preloadFirstFrame();
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -110,14 +148,20 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[500vh]">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[200vh]">
       <div id="hero-sticky" className="sticky top-0 h-screen overflow-hidden">
-        <canvas id="hero-canvas" ref={canvasRef} className="absolute top-0 left-0 w-full h-full block" />
+        <canvas
+          id="hero-canvas"
+          ref={canvasRef}
+          className="absolute left-0 w-full block"
+          style={{ height: 'calc(100vh + 150px)', top: 0, willChange: 'transform' }}
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1208]/35 via-[#1a1208]/08 to-[#1a1208]/55 z-[1] pointer-events-none" />
         <div
           id="hero-text-overlay"
           ref={textOverlayRef}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
+          style={{ willChange: 'transform' }}
         >
           <img
             src="/valanam-new-logo.png"

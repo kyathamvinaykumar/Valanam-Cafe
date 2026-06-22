@@ -1,11 +1,55 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function StorySection() {
+  const sectionRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const content = contentRef.current;
+    if (!section || !content) return;
+
+    let rafPending = false;
+
+    const handleScroll = () => {
+      if (rafPending) return;
+      rafPending = true;
+
+      requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        // Only animate when section is in viewport
+        if (rect.bottom > 0 && rect.top < windowHeight) {
+          const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+          
+          // Subtle parallax on content (moves slower than scroll)
+          const contentOffset = (progress - 0.5) * 30;
+          content.style.transform = `translate3d(0, ${contentOffset}px, 0)`;
+        }
+        
+        rafPending = false;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial position
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <hr className="border-none border-t border-royalLine m-0" />
-      <section className="bg-dark px-6 py-[clamp(60px,12vh,120px)]" id="story">
-        <div className="max-w-[680px] mx-auto">
+      <section ref={sectionRef} className="bg-dark px-6 py-[clamp(60px,12vh,120px)] relative overflow-hidden" id="story">
+        {/* Parallax background glow */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 40%, rgba(201, 132, 58, 0.04) 0%, transparent 70%)',
+          }}
+        />
+        <div ref={contentRef} className="max-w-[680px] mx-auto relative z-[1]" style={{ willChange: 'transform' }}>
           <h2 className="reveal font-playfair italic text-[clamp(2rem,4vw,3.5rem)] text-parchment text-center mb-[60px] leading-[1.2]">
             "Some meals should not travel."
           </h2>
@@ -46,3 +90,4 @@ export default function StorySection() {
     </>
   );
 }
+

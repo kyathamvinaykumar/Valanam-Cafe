@@ -1,18 +1,43 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import StorySection from './components/StorySection';
-import MenuSection from './components/MenuSection';
-import SpaceSection from './components/SpaceSection';
-import KitchenSection from './components/KitchenSection';
-import VisitSection from './components/VisitSection';
+import Home from './pages/Home';
+import Gallery from './pages/Gallery';
+import Visit from './pages/Visit';
+import Blog from './pages/Blog';
+import Discover from './pages/Discover';
 import Footer from './components/Footer';
+import CustomCursor from './components/CustomCursor';
 import Lenis from 'lenis';
 
 export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lenisRef = useRef(null);
+  
+  const location = useLocation();
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [transitionStage, setTransitionStage] = useState("page-enter-active");
+
+  // Page Transition coordinator effect
+  useEffect(() => {
+    if (location.pathname !== displayLocation.pathname) {
+      setTransitionStage("page-exit");
+      const timer = setTimeout(() => {
+        setDisplayLocation(location);
+        setTransitionStage("page-enter");
+      }, 120); // 120ms exit duration
+      return () => clearTimeout(timer);
+    }
+  }, [location, displayLocation]);
+
+  useEffect(() => {
+    if (transitionStage === "page-enter") {
+      // Force layout reflow
+      void document.body.offsetHeight;
+      setTransitionStage("page-enter-active");
+    }
+  }, [transitionStage]);
 
   // Initialize Lenis smooth scroll
   useEffect(() => {
@@ -36,30 +61,44 @@ export default function App() {
     };
   }, []);
 
-  // Scroll reveal observer
+  // Scroll to top on route change (fires when new page starts entering)
   useEffect(() => {
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: '0px 0px -40px 0px',
-      }
-    );
+    window.scrollTo(0, 0);
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+  }, [displayLocation.pathname]);
 
-    reveals.forEach((el) => observer.observe(el));
+  // Scroll reveal observer on route change (fires when new components enter the DOM)
+  useEffect(() => {
+    let observer;
+    const timeoutId = setTimeout(() => {
+      const reveals = document.querySelectorAll('.reveal');
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.15,
+          rootMargin: '0px 0px -40px 0px',
+        }
+      );
+
+      reveals.forEach((el) => observer.observe(el));
+    }, 100);
 
     return () => {
-      observer.disconnect();
+      clearTimeout(timeoutId);
+      if (observer) {
+        observer.disconnect();
+      }
     };
-  }, []);
+  }, [displayLocation.pathname]);
 
   // Lock scrolling when lightbox or mobile menu is active
   useEffect(() => {
@@ -77,7 +116,10 @@ export default function App() {
   }, [lightboxImage, isMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-dark text-parchment relative font-light leading-[1.7]">
+    <div className="min-h-screen bg-dark text-parchment relative font-light leading-[1.7] custom-cursor-active">
+      {/* Custom Circle Cursor */}
+      <CustomCursor />
+
       {/* Navigation */}
       <Navbar isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
 
@@ -87,16 +129,16 @@ export default function App() {
           isMenuOpen ? 'blur-md scale-[0.99] pointer-events-none' : ''
         }`}
       >
-        {/* Hero Canvas sequence */}
-        <Hero />
-
-        {/* Main Sections */}
-        <main>
-          <StorySection />
-          <MenuSection />
-          <SpaceSection onImageClick={setLightboxImage} />
-          <KitchenSection onImageClick={setLightboxImage} />
-          <VisitSection />
+        {/* Main Routed Content with Transitions */}
+        <main className={`page-transition-wrapper ${transitionStage}`}>
+          <Routes location={displayLocation}>
+            <Route path="/" element={<Home />} />
+            <Route path="/gallery" element={<Gallery onImageClick={setLightboxImage} />} />
+            <Route path="/visit" element={<Visit />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/ai" element={<Discover />} />
+            <Route path="*" element={<Discover />} />
+          </Routes>
         </main>
 
         {/* Footer */}

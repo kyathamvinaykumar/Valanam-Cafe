@@ -39,7 +39,7 @@ body::after {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 9998;
   opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px;
@@ -48,13 +48,15 @@ body::after {
 /* Scroll reveal classes */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translate3d(0, 20px, 0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.in {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* Specific smooth "soft pop" scroll reveal for images */
@@ -140,7 +142,7 @@ html.lenis, html.lenis body {
   overflow: hidden;
 }
 
-.lenis.lenis-smooth iframe {
+.lenis.lenis-smooth .hero-frame-canvas iframe {
   pointer-events: none;
 }
 
@@ -153,6 +155,44 @@ html.lenis, html.lenis body {
 .backdrop-blur-overlay {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+}
+
+/* Page Transition Wrapper & Stages */
+.page-transition-wrapper {
+  transition: opacity 180ms cubic-bezier(0.25, 1, 0.5, 1), transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+.page-transition-wrapper.page-enter {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+}
+
+.page-transition-wrapper.page-enter-active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.page-transition-wrapper.page-exit {
+  transition: opacity 120ms ease-in, transform 120ms ease-in;
+  opacity: 0;
+  transform: translate3d(0, -10px, 0);
+}
+
+/* Custom Cursor - Hide default cursor on desktop */
+@media (hover: hover) and (pointer: fine) {
+  .custom-cursor-active,
+  .custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+/* Hide custom cursor elements on touch devices */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor-outer,
+  .custom-cursor-inner {
+    display: none !important;
+  }
 }
 
 
