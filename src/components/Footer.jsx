@@ -2,9 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
+  const handleVisitClick = () => {
+    if (window.location.pathname === '/visit') {
+      document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
-      <footer className="bg-gradient-to-b from-[#2c1a0e]/20 to-[#0f0a04] px-6 lg:px-12 pt-12 pb-10 border-t border-royalLine/15">
+      <footer id="footer" className="bg-gradient-to-b from-[#2c1a0e]/20 to-[#0f0a04] px-6 lg:px-12 pt-12 pb-10 border-t border-royalLine/15">
         <div className="max-w-[1200px] mx-auto">
           {/* Multi-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-14 text-left items-start">
@@ -92,7 +98,7 @@ export default function Footer() {
                 <Link to="/blog" className="text-parchment/50 hover:text-amber transition-colors duration-300">
                   Blog
                 </Link>
-                <Link to="/visit" className="text-parchment/50 hover:text-amber transition-colors duration-300">
+                <Link to="/visit" onClick={handleVisitClick} className="text-parchment/50 hover:text-amber transition-colors duration-300">
                   Visit Us
                 </Link>
                 <Link to="/ai" className="text-parchment/50 hover:text-amber transition-colors duration-300">

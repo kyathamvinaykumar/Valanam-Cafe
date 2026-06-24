@@ -19,6 +19,13 @@ export default function Navbar({ isOpen, setIsOpen }) {
 
   const closeNav = () => setIsOpen(false);
 
+  const handleVisitClick = () => {
+    closeNav();
+    if (window.location.pathname === '/visit') {
+      document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const getNavLinkClass = ({ isActive }) =>
     `text-[0.82rem] tracking-[0.1em] uppercase transition-colors duration-300 ${
       isActive ? 'text-amber font-medium' : 'text-parchment hover:text-amber'
@@ -72,7 +79,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/visit" onClick={closeNav} className={getNavLinkClass}>
+          <NavLink to="/visit" onClick={handleVisitClick} className={getNavLinkClass}>
             Visit Us
           </NavLink>
         </li>

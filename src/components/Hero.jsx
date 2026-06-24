@@ -110,12 +110,6 @@ export default function Hero() {
         currentFrameIndexRef.current = frameIndex;
         drawFrame(frameIndex);
 
-        if (canvas) {
-          // 90% scroll speed: translates up by 10% of scroll, capped at -150px
-          const backgroundOffset = Math.max(-scrollTop * 0.1, -150);
-          canvas.style.transform = `translate3d(0, ${backgroundOffset}px, 0)`;
-        }
-
         if (textOverlay) {
           // 98% scroll speed: translates up by 2% of scroll
           const textOffset = -scrollTop * 0.02;
@@ -144,6 +138,52 @@ export default function Hero() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // New, isolated effect to add smooth, throttled parallax scrolling to the background video canvas element
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let isMobileOrTouch = false;
+    const checkDevice = () => {
+      // Keep parallax subtle or disabled on mobile/touch screens
+      isMobileOrTouch = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    };
+    
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+
+    let parallaxRafPending = false;
+
+    const handleVideoParallaxScroll = () => {
+      if (parallaxRafPending) return;
+      parallaxRafPending = true;
+
+      requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        
+        if (isMobileOrTouch) {
+          // Subtle/no parallax on mobile to prevent jank/glitches, keeping it centered (non-parallax)
+          canvas.style.transform = 'translateY(0px)';
+        } else {
+          // Slower scroll speed: translates up by 12% of scroll, capped at -150px (to avoid layout shift or revealing black background)
+          const backgroundOffset = Math.max(-scrollTop * 0.12, -150);
+          canvas.style.transform = `translateY(${backgroundOffset}px)`;
+        }
+
+        parallaxRafPending = false;
+      });
+    };
+
+    window.addEventListener('scroll', handleVideoParallaxScroll, { passive: true });
+    // Run initial alignment
+    handleVideoParallaxScroll();
+
+    return () => {
+      window.removeEventListener('resize', checkDevice);
+      window.removeEventListener('scroll', handleVideoParallaxScroll);
     };
   }, []);
 
