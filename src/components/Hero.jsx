@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const FRAME_COUNT = 114;
 const FRAME_PATH = (n) => `/valanam zip/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
@@ -6,6 +6,7 @@ const FRAME_PATH = (n) => `/valanam zip/ezgif-frame-${String(n).padStart(3, '0')
 export default function Hero() {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
+  const stickyRef = useRef(null);
   const textOverlayRef = useRef(null);
   const framesRef = useRef([]);
 
@@ -13,8 +14,20 @@ export default function Hero() {
   const canvasWidthRef = useRef(0);
   const canvasHeightRef = useRef(0);
   const containerHeightRef = useRef(0);
+  const stickyHeightRef = useRef(0);
   const currentFrameIndexRef = useRef(0);
   const dprRef = useRef(1);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,10 +40,12 @@ export default function Hero() {
 
     const updateDimensions = () => {
       const container = containerRef.current;
-      if (!canvas || !container) return;
+      const sticky = stickyRef.current;
+      if (!canvas || !container || !sticky) return;
       canvasWidthRef.current = canvas.offsetWidth;
       canvasHeightRef.current = canvas.offsetHeight;
       containerHeightRef.current = container.offsetHeight;
+      stickyHeightRef.current = sticky.offsetHeight;
     };
 
     const drawFrame = (index) => {
@@ -97,13 +112,14 @@ export default function Hero() {
         const canvas = canvasRef.current;
         const textOverlay = textOverlayRef.current;
         const containerHeight = containerHeightRef.current;
-        if (!containerHeight) {
+        const stickyHeight = stickyHeightRef.current;
+        if (!containerHeight || !stickyHeight) {
           rafPending = false;
           return;
         }
 
         const scrollTop = window.scrollY;
-        const maxScroll = containerHeight - window.innerHeight;
+        const maxScroll = containerHeight - stickyHeight;
         const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
         const frameIndex = Math.min(Math.floor(progress * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
         
@@ -188,13 +204,13 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[200vh]">
-      <div id="hero-sticky" className="sticky top-0 h-screen overflow-hidden">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[140vh] md:h-[200vh]">
+      <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[60vh] md:h-screen overflow-hidden">
         <canvas
           id="hero-canvas"
           ref={canvasRef}
           className="absolute left-0 w-full block"
-          style={{ height: 'calc(100vh + 150px)', top: 0, willChange: 'transform' }}
+          style={{ height: isMobile ? '100%' : 'calc(100vh + 150px)', top: 0, willChange: 'transform' }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1208]/35 via-[#1a1208]/08 to-[#1a1208]/55 z-[1] pointer-events-none" />
         <div
@@ -206,15 +222,15 @@ export default function Hero() {
           <img
             src="/valanam-new-logo.png"
             alt="Valanam Logo"
-            className="h-[160px] w-auto mx-auto mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+            className="h-[90px] md:h-[160px] w-auto mx-auto mb-3 md:mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
           />
-          <div className="font-playfair text-[clamp(2.8rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
+          <div className="font-playfair text-[clamp(2.1rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
             VALANAM
           </div>
-          <div className="font-playfair italic text-[clamp(0.95rem,2vw,1.3rem)] text-amber mt-4 drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)]">
+          <div className="font-playfair italic text-[clamp(0.85rem,2vw,1.3rem)] text-amber mt-2 md:mt-4 drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)]">
             Where stories simmer, and flavors linger.
           </div>
         </div>
