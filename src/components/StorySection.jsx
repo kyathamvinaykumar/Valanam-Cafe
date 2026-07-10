@@ -9,6 +9,12 @@ export default function StorySection() {
     const content = contentRef.current;
     if (!section || !content) return;
 
+    const isMobile = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isMobile) {
+      content.style.transform = 'none';
+      return;
+    }
+
     let rafPending = false;
 
     const handleScroll = () => {

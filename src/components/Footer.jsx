@@ -22,6 +22,7 @@ export default function Footer() {
                 alt="Valanam Kitchen Logo"
                 style={{ height: '180px', width: 'auto' }}
                 className="mb-4 block"
+                loading="lazy"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}

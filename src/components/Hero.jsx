@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
 const FRAME_COUNT = 114;
-const FRAME_PATH = (n) => `/valanam zip/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
+const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+const FRAME_PATH = (n) => {
+  const folder = isMobileDevice ? 'valanam' : 'valanam zip';
+  return `/${folder}/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
+};
 
 export default function Hero() {
   const canvasRef = useRef(null);
@@ -120,8 +124,7 @@ export default function Hero() {
         drawFrame(frameIndex);
 
         if (textOverlay) {
-          // 98% scroll speed: translates up by 2% of scroll
-          const textOffset = -scrollTop * 0.02;
+          const textOffset = isMobileDevice ? 0 : -scrollTop * 0.02;
           textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
           textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
         }
