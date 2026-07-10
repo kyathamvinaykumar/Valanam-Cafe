@@ -1,11 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 const FRAME_COUNT = 114;
-const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
-const FRAME_PATH = (n) => {
-  const folder = isMobileDevice ? 'valanam' : 'valanam zip';
-  return `/${folder}/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
-};
+const FRAME_PATH = (n) => `/valanam zip/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
 
 export default function Hero() {
   const canvasRef = useRef(null);
@@ -116,15 +112,15 @@ export default function Hero() {
 
         const scrollTop = window.scrollY;
         const maxScroll = containerHeight - stickyHeight;
-        const scrollDistance = maxScroll > 10 ? maxScroll : (window.innerHeight * 0.35);
-        const progress = Math.min(Math.max(scrollTop / scrollDistance, 0), 1);
+        const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
         const frameIndex = Math.min(Math.floor(progress * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
         
         currentFrameIndexRef.current = frameIndex;
         drawFrame(frameIndex);
 
         if (textOverlay) {
-          const textOffset = isMobileDevice ? 0 : -scrollTop * 0.02;
+          // 98% scroll speed: translates up by 2% of scroll
+          const textOffset = -scrollTop * 0.02;
           textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
           textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
         }
@@ -200,7 +196,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[100dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[120dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
       <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[100dvh] overflow-hidden w-full max-w-full">
         <canvas
           id="hero-canvas"
@@ -212,7 +208,7 @@ export default function Hero() {
         <div
           id="hero-text-overlay"
           ref={textOverlayRef}
-          className="absolute top-[calc(50%-50px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
+          className="absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
           style={{ willChange: 'transform' }}
         >
           <img

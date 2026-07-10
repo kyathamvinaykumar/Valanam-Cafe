@@ -37,7 +37,7 @@ export default function VisitSection() {
             {/* Image 4: VALANAM Hero Image (Top-Left on desktop, First & full width on mobile) */}
             <div className="reveal aspect-[4/5] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-2 md:col-span-1 order-1 gallery-hover-card bg-clay/20">
               <img
-                src="/visit/visit_4.jpg"
+                src="/visit/visit_4.webp"
                 alt="Valanam Café Poster (Hero)"
                 className="w-full h-full object-cover"
                 // Eagerly load the first hero poster image to avoid layout shifts on first print
@@ -47,7 +47,7 @@ export default function VisitSection() {
             {/* Image 2: TV Frame / Camera (Top-Right on desktop, Second & half-width on mobile) */}
             <div className="reveal reveal-d1 aspect-[3/4] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-1 order-2 lg:w-[82%] lg:justify-self-start gallery-hover-card bg-clay/20">
               <img
-                src="/visit/visit_2.jpg"
+                src="/visit/visit_2.webp"
                 alt="Family camera frame"
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -57,7 +57,7 @@ export default function VisitSection() {
             {/* Image 3: Laptop Conversation (Bottom-Left on desktop, Fourth & full width on mobile) */}
             <div className="reveal reveal-d2 aspect-[4/5] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-2 md:col-span-1 order-4 md:order-3 gallery-hover-card bg-clay/20">
               <img
-                src="/visit/visit_3.jpg"
+                src="/visit/visit_3.webp"
                 alt="Laptop and conversation corner"
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -67,7 +67,7 @@ export default function VisitSection() {
             {/* Image 1: Friends Dining / Music (Bottom-Right on desktop, Third & half-width on mobile) */}
             <div className="reveal reveal-d3 aspect-[3/4] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-1 order-3 md:order-4 gallery-hover-card bg-clay/20">
               <img
-                src="/visit/visit_1.jpg"
+                src="/visit/visit_1.webp"
                 alt="Dining table and music performance"
                 className="w-full h-full object-cover"
                 loading="lazy"

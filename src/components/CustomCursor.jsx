@@ -10,9 +10,6 @@ export default function CustomCursor() {
   const rafRef = useRef(null);
 
   useEffect(() => {
-    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    if (isTouch) return;
-
     const outer = outerRef.current;
     const inner = innerRef.current;
     if (!outer || !inner) return;
