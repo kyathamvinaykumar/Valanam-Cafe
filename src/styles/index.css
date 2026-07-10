@@ -17,6 +17,9 @@
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 body {
@@ -24,6 +27,8 @@ body {
   background-color: var(--dark);
   color: var(--parchment);
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
   font-weight: 300;
   line-height: 1.7;
 }
@@ -192,6 +197,17 @@ html.lenis, html.lenis body {
   .custom-cursor-outer,
   .custom-cursor-inner {
     display: none !important;
+  }
+}
+
+/* Premium hover effects for gallery cards - desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .gallery-hover-card img {
+    transition: transform 350ms ease-out, filter 350ms ease-out;
+  }
+  .gallery-hover-card:hover img {
+    transform: scale(1.03) translateZ(0);
+    filter: brightness(1.05);
   }
 }
 

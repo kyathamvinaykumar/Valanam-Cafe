@@ -49,14 +49,28 @@ export default function App() {
     });
     lenisRef.current = lenis;
 
+    let rafId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
+
+    // Force layout recalculations after Lenis initialization
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new Event('resize'));
+      lenis.resize();
+    });
+
+    const timeoutId = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      lenis.resize();
+    }, 150);
 
     return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timeoutId);
       lenis.destroy();
     };
   }, []);
@@ -66,6 +80,13 @@ export default function App() {
     window.scrollTo(0, 0);
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
+      lenisRef.current.resize();
+      
+      const timer = setTimeout(() => {
+        lenisRef.current?.resize();
+        window.dispatchEvent(new Event('resize'));
+      }, 80);
+      return () => clearTimeout(timer);
     }
   }, [displayLocation.pathname]);
 
@@ -168,7 +189,7 @@ export default function App() {
           <img
             src={lightboxImage}
             alt="Enlarged gallery view"
-            className="m-auto block max-w-[90%] max-h-[85vh] object-contain rounded-[4px] shadow-[0_10px_40px_rgba(0,0,0,0.5)] lightbox__content"
+            className="m-auto block max-w-[90%] max-h-[85dvh] object-contain rounded-[4px] shadow-[0_10px_40px_rgba(0,0,0,0.5)] lightbox__content"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
           />
         </div>

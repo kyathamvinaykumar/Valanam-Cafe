@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const FRAME_COUNT = 114;
 const FRAME_PATH = (n) => `/valanam zip/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
@@ -18,16 +18,7 @@ export default function Hero() {
   const currentFrameIndexRef = useRef(0);
   const dprRef = useRef(1);
 
-  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -96,6 +87,7 @@ export default function Hero() {
       img.src = FRAME_PATH(1);
       img.onload = () => {
         framesRef.current[0] = img;
+        updateDimensions();
         drawFrame(0);
         // Stream remaining frames asynchronously
         preloadRemainingFrames();
@@ -204,13 +196,13 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[140vh] md:h-[200vh]">
-      <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[60vh] md:h-screen overflow-hidden">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[140dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
+      <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[60dvh] md:h-[100dvh] overflow-hidden w-full max-w-full">
         <canvas
           id="hero-canvas"
           ref={canvasRef}
-          className="absolute left-0 w-full block"
-          style={{ height: isMobile ? '100%' : 'calc(100vh + 150px)', top: 0, willChange: 'transform' }}
+          className="absolute left-0 w-full block h-full md:h-[calc(100dvh+150px)]"
+          style={{ top: 0, willChange: 'transform' }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1208]/35 via-[#1a1208]/08 to-[#1a1208]/55 z-[1] pointer-events-none" />
         <div

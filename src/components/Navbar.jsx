@@ -59,7 +59,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
       </Link>
 
       <ul
-        className={`fixed top-0 h-screen w-[65vw] flex flex-col justify-center bg-[#0f0a04]/97 mobile-menu-blur transition-[right] duration-350 p-8 gap-10 list-none z-50 md:static md:h-auto md:w-auto md:flex-row md:bg-transparent md:backdrop-blur-none md:p-0 md:gap-8 ${
+        className={`fixed top-0 h-[100dvh] w-[65vw] flex flex-col justify-center bg-[#0f0a04]/97 mobile-menu-blur transition-[right] duration-350 p-8 gap-10 list-none z-50 md:static md:h-auto md:w-auto md:flex-row md:bg-transparent md:backdrop-blur-none md:p-0 md:gap-8 ${
           isOpen ? 'right-0' : '-right-full'
         }`}
       >
