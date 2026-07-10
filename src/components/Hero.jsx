@@ -196,8 +196,8 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[140dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
-      <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[60dvh] md:h-[100dvh] overflow-hidden w-full max-w-full">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[120dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
+      <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[100dvh] overflow-hidden w-full max-w-full">
         <canvas
           id="hero-canvas"
           ref={canvasRef}
@@ -208,13 +208,13 @@ export default function Hero() {
         <div
           id="hero-text-overlay"
           ref={textOverlayRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
+          className="absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
           style={{ willChange: 'transform' }}
         >
           <img
             src="/valanam-new-logo.png"
             alt="Valanam Logo"
-            className="h-[90px] md:h-[160px] w-auto mx-auto mb-3 md:mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+            className="h-[65px] md:h-[160px] w-auto mx-auto mb-3 md:mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
