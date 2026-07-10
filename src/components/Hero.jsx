@@ -95,38 +95,44 @@ export default function Hero() {
       framesRef.current[0] = img;
     };
 
-    let rafPending = false;
+    let targetProgress = 0;
+    let currentProgress = 0;
+    const lerpEase = 0.08; // Butter-smooth easing factor
+    let animationFrameId;
+
     const handleScroll = () => {
-      if (rafPending) return;
-      rafPending = true;
+      const containerHeight = containerHeightRef.current;
+      const stickyHeight = stickyHeightRef.current;
+      if (!containerHeight || !stickyHeight) return;
 
-      requestAnimationFrame(() => {
-        const canvas = canvasRef.current;
-        const textOverlay = textOverlayRef.current;
-        const containerHeight = containerHeightRef.current;
-        const stickyHeight = stickyHeightRef.current;
-        if (!containerHeight || !stickyHeight) {
-          rafPending = false;
-          return;
-        }
+      const scrollTop = window.scrollY;
+      const maxScroll = containerHeight - stickyHeight;
+      const scrollDistance = maxScroll > 10 ? maxScroll : (window.innerHeight * 0.35);
+      
+      targetProgress = Math.min(Math.max(scrollTop / scrollDistance, 0), 1);
+    };
 
+    const animate = () => {
+      const diff = targetProgress - currentProgress;
+      if (Math.abs(diff) > 0.0005) {
+        currentProgress += diff * lerpEase;
+      } else {
+        currentProgress = targetProgress;
+      }
+
+      const frameIndex = Math.min(Math.floor(currentProgress * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
+      currentFrameIndexRef.current = frameIndex;
+      drawFrame(frameIndex);
+
+      const textOverlay = textOverlayRef.current;
+      if (textOverlay) {
         const scrollTop = window.scrollY;
-        const maxScroll = containerHeight - stickyHeight;
-        const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
-        const frameIndex = Math.min(Math.floor(progress * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
-        
-        currentFrameIndexRef.current = frameIndex;
-        drawFrame(frameIndex);
+        const textOffset = -scrollTop * 0.02;
+        textOverlay.style.opacity = String(Math.max(1 - currentProgress * 3, 0));
+        textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
+      }
 
-        if (textOverlay) {
-          // 98% scroll speed: translates up by 2% of scroll
-          const textOffset = -scrollTop * 0.02;
-          textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
-          textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
-        }
-
-        rafPending = false;
-      });
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     const handleResize = () => {
@@ -140,12 +146,17 @@ export default function Hero() {
     updateDimensions();
     preloadFirstFrame();
 
+    animationFrameId = requestAnimationFrame(animate);
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 
@@ -196,7 +207,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[120dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[100dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
       <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[100dvh] overflow-hidden w-full max-w-full">
         <canvas
           id="hero-canvas"
@@ -208,7 +219,7 @@ export default function Hero() {
         <div
           id="hero-text-overlay"
           ref={textOverlayRef}
-          className="absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
+          className="absolute top-[calc(50%-50px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
           style={{ willChange: 'transform' }}
         >
           <img
