@@ -5,11 +5,12 @@ export default function Navbar({ isOpen, setIsOpen }) {
   const [isSolid, setIsSolid] = useState(false);
 
   useEffect(() => {
+    let isCurrentlySolid = false;
     const handleScroll = () => {
-      if (window.scrollY > 80) {
-        setIsSolid(true);
-      } else {
-        setIsSolid(false);
+      const solid = window.scrollY > 80;
+      if (solid !== isCurrentlySolid) {
+        isCurrentlySolid = solid;
+        setIsSolid(solid);
       }
     };
 

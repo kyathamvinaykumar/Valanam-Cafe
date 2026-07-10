@@ -9,6 +9,12 @@ export default function StorySection() {
     const content = contentRef.current;
     if (!section || !content) return;
 
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      content.style.transform = '';
+      return;
+    }
+
     let rafPending = false;
 
     const handleScroll = () => {

@@ -76,6 +76,23 @@ img.reveal.in {
   animation: softPop 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@media (max-width: 767px) {
+  img.reveal.in {
+    animation: softPopMobile 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes softPopMobile {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0);
+  }
+}
+
 .reveal-d1 {
   transition-delay: 0.1s;
   animation-delay: 0.1s;
@@ -160,6 +177,18 @@ html.lenis, html.lenis body {
 .backdrop-blur-overlay {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+}
+
+@media (max-width: 767px) {
+  .mobile-menu-blur {
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    background-color: rgba(15, 10, 4, 0.98) !important;
+  }
+  .backdrop-blur-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }
 
 /* Page Transition Wrapper & Stages */

@@ -111,6 +111,11 @@ export default function Hero() {
         }
 
         const scrollTop = window.scrollY;
+        if (scrollTop > containerHeight + 100) {
+          rafPending = false;
+          return;
+        }
+
         const maxScroll = containerHeight - stickyHeight;
         const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
         const frameIndex = Math.min(Math.floor(progress * (FRAME_COUNT - 1)), FRAME_COUNT - 1);
@@ -119,8 +124,8 @@ export default function Hero() {
         drawFrame(frameIndex);
 
         if (textOverlay) {
-          // 98% scroll speed: translates up by 2% of scroll
-          const textOffset = -scrollTop * 0.02;
+          const isMobile = window.innerWidth < 768;
+          const textOffset = isMobile ? 0 : -scrollTop * 0.02;
           textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
           textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
         }
@@ -154,14 +159,11 @@ export default function Hero() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let isMobileOrTouch = false;
-    const checkDevice = () => {
-      // Keep parallax subtle or disabled on mobile/touch screens
-      isMobileOrTouch = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    };
-    
-    checkDevice();
-    window.addEventListener('resize', checkDevice);
+    const isMobileOrTouch = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isMobileOrTouch) {
+      canvas.style.transform = 'translateY(0px)';
+      return;
+    }
 
     let parallaxRafPending = false;
 
@@ -172,25 +174,18 @@ export default function Hero() {
       requestAnimationFrame(() => {
         const scrollTop = window.scrollY;
         
-        if (isMobileOrTouch) {
-          // Subtle/no parallax on mobile to prevent jank/glitches, keeping it centered (non-parallax)
-          canvas.style.transform = 'translateY(0px)';
-        } else {
-          // Slower scroll speed: translates up by 12% of scroll, capped at -150px (to avoid layout shift or revealing black background)
-          const backgroundOffset = Math.max(-scrollTop * 0.12, -150);
-          canvas.style.transform = `translateY(${backgroundOffset}px)`;
-        }
+        // Slower scroll speed: translates up by 12% of scroll, capped at -150px (to avoid layout shift or revealing black background)
+        const backgroundOffset = Math.max(-scrollTop * 0.12, -150);
+        canvas.style.transform = `translateY(${backgroundOffset}px)`;
 
         parallaxRafPending = false;
       });
     };
 
     window.addEventListener('scroll', handleVideoParallaxScroll, { passive: true });
-    // Run initial alignment
     handleVideoParallaxScroll();
 
     return () => {
-      window.removeEventListener('resize', checkDevice);
       window.removeEventListener('scroll', handleVideoParallaxScroll);
     };
   }, []);
