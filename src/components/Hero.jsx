@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const FRAME_COUNT = 114;
 const FRAME_PATH = (n) => `/valanam zip/ezgif-frame-${String(n).padStart(3, '0')}.jpg`;
@@ -18,9 +18,22 @@ export default function Hero() {
   const currentFrameIndexRef = useRef(0);
   const dprRef = useRef(1);
 
+  const [videoSrc, setVideoSrc] = useState(null);
 
+  // Load mobile video after component mounts to avoid blocking initial paint
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isMobile) {
+      const timer = setTimeout(() => {
+        setVideoSrc('/hero_mobile.mp4');
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -191,14 +204,31 @@ export default function Hero() {
   }, []);
 
   return (
-    <div id="hero-scroll-container" ref={containerRef} className="relative h-[120dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
+    <div id="hero-scroll-container" ref={containerRef} className="relative h-[100dvh] md:h-[200dvh] w-full max-w-full overflow-x-hidden">
       <div id="hero-sticky" ref={stickyRef} className="sticky top-0 h-[100dvh] overflow-hidden w-full max-w-full">
+        {/* Canvas for Desktop scroll animation */}
         <canvas
           id="hero-canvas"
           ref={canvasRef}
-          className="absolute left-0 w-full block h-full md:h-[calc(100dvh+150px)]"
+          className="absolute left-0 w-full hidden md:block h-full md:h-[calc(100dvh+150px)]"
           style={{ top: 0, willChange: 'transform' }}
         />
+        
+        {/* Hardware-accelerated Video for Mobile fluid playback */}
+        {videoSrc ? (
+          <video
+            src={videoSrc}
+            playsInline
+            muted
+            autoPlay
+            loop
+            preload="metadata"
+            className="absolute left-0 top-0 w-full h-full object-cover md:hidden"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[#1a1208] md:hidden" />
+        )}
+
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1208]/35 via-[#1a1208]/08 to-[#1a1208]/55 z-[1] pointer-events-none" />
         <div
           id="hero-text-overlay"
@@ -209,15 +239,15 @@ export default function Hero() {
           <img
             src="/valanam-new-logo.png"
             alt="Valanam Logo"
-            className="h-[65px] md:h-[160px] w-auto mx-auto mb-3 md:mb-5 block drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+            className="h-[65px] md:h-[160px] w-auto mx-auto mb-3 md:mb-5 block drop-shadow-none md:drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
           />
-          <div className="font-playfair text-[clamp(2.1rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
+          <div className="font-playfair text-[clamp(2.1rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-none md:drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
             VALANAM
           </div>
-          <div className="font-playfair italic text-[clamp(0.85rem,2vw,1.3rem)] text-amber mt-2 md:mt-4 drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)]">
+          <div className="font-playfair italic text-[clamp(0.85rem,2vw,1.3rem)] text-amber mt-2 md:mt-4 drop-shadow-none md:drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)]">
             Where stories simmer, and flavors linger.
           </div>
         </div>
