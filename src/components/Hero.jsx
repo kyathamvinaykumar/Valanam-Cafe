@@ -20,9 +20,6 @@ export default function Hero() {
 
   const [videoSrc, setVideoSrc] = useState(null);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
-  const [mobileIntroStep, setMobileIntroStep] = useState('initial'); // 'initial', 'fading', 'playing'
-
-  const mobileVideoRef = useRef(null);
 
   // Load mobile video after component mounts to avoid blocking initial paint and track device size
   useEffect(() => {
@@ -45,47 +42,6 @@ export default function Hero() {
     }
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Mobile intro animation sequence
-  useEffect(() => {
-    if (!isMobileDevice || !videoSrc) return;
-
-    // Phase 1: Wait 1.5 seconds, then begin fading
-    const fadeTimer = setTimeout(() => {
-      setMobileIntroStep('fading');
-    }, 1500);
-
-    // Phase 2: Fade completes over 450ms (total 1.95s), then play video
-    const playTimer = setTimeout(() => {
-      setMobileIntroStep('playing');
-      const video = mobileVideoRef.current;
-      if (video) {
-        video.currentTime = 0;
-        video.play().catch((err) => {
-          console.warn("Mobile video play failed:", err);
-        });
-      }
-    }, 1950);
-
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(playTimer);
-    };
-  }, [isMobileDevice, videoSrc]);
-
-  const getOverlayClass = () => {
-    const base = "absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] pointer-events-none";
-    if (isMobileDevice) {
-      if (mobileIntroStep === 'initial') {
-        return `${base} opacity-100 transition-opacity duration-500`;
-      }
-      if (mobileIntroStep === 'fading') {
-        return `${base} opacity-0 transition-opacity duration-500`;
-      }
-      return `${base} hidden opacity-0`;
-    }
-    return `${base} transition-opacity duration-100`;
-  };
 
   useEffect(() => {
     const isMobile = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
@@ -280,13 +236,13 @@ export default function Hero() {
         {/* Hardware-accelerated Video for Mobile fluid playback */}
         {videoSrc ? (
           <video
-            ref={mobileVideoRef}
             src={videoSrc}
             playsInline
             muted
+            autoPlay
             loop
-            preload="auto"
-            className="absolute left-0 top-0 w-full h-full object-contain bg-[#1a1208] md:hidden"
+            preload="metadata"
+            className="absolute left-0 top-0 w-full h-full object-cover md:hidden"
           />
         ) : (
           <div className="absolute inset-0 bg-[#1a1208] md:hidden" />
@@ -296,7 +252,7 @@ export default function Hero() {
         <div
           id="hero-text-overlay"
           ref={textOverlayRef}
-          className={getOverlayClass()}
+          className={`absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none ${isMobileDevice ? 'hidden opacity-0' : ''}`}
           style={{ willChange: 'transform' }}
         >
           <img
