@@ -26,6 +26,7 @@ export default function Footer() {
                   e.currentTarget.style.display = 'none';
                 }}
               />
+              <div className="w-[40px] h-[1px] bg-royalLine/15 mb-3.5"></div>
               <div className="font-playfair text-[1.35rem] tracking-[0.1em] text-parchment leading-tight">
                 Valanam Kitchen
               </div>
@@ -168,7 +169,7 @@ export default function Footer() {
               Valanam Kitchen • Adikmet, Hyderabad
             </div>
             <div className="mt-3 font-inter text-[0.76rem] tracking-[0.05em] uppercase text-parchment/60">
-              © {new Date().getFullYear()} Valanam Kitchen. All Rights Reserved.
+              © Valanam Kitchen. All Rights Reserved.
             </div>
           </div>
         </div>
