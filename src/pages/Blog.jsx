@@ -4,7 +4,7 @@ export default function Blog() {
   return (
     <div className="pb-[120px]">
       {/* Existing Hero Section */}
-      <div className="pt-[140px] pb-[60px] px-6 max-w-[800px] mx-auto text-center flex flex-col items-center">
+      <div className="pt-[140px] pb-[20px] px-6 max-w-[800px] mx-auto text-center flex flex-col items-center">
         <h1 className="reveal font-playfair italic text-[clamp(2.5rem,5vw,4.5rem)] text-amber mb-6">
           Valanam Journal
         </h1>
