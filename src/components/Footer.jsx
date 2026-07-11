@@ -146,10 +146,13 @@ export default function Footer() {
                 <iframe
                   src="https://www.openstreetmap.org/export/embed.html?bbox=78.4480,17.4400,78.4580,17.4470&layer=mapnik&marker=17.4435,78.4530"
                   width="100%"
-                  height="100%"
+                  height="210px"
                   style={{
                     border: 'none',
                     display: 'block',
+                    position: 'absolute',
+                    top: '-15px',
+                    left: 0,
                     filter: 'sepia(0.4) contrast(0.9) brightness(0.85)',
                   }}
                   loading="lazy"
