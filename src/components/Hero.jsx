@@ -19,16 +19,28 @@ export default function Hero() {
   const dprRef = useRef(1);
 
   const [videoSrc, setVideoSrc] = useState(null);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
 
-  // Load mobile video after component mounts to avoid blocking initial paint
+  // Load mobile video after component mounts to avoid blocking initial paint and track device size
   useEffect(() => {
+    const checkMobile = () => {
+      const isMobile = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      setIsMobileDevice(isMobile);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     const isMobile = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     if (isMobile) {
       const timer = setTimeout(() => {
         setVideoSrc('/hero_mobile.mp4');
       }, 100);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('resize', checkMobile);
+      };
     }
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -137,10 +149,17 @@ export default function Hero() {
         drawFrame(frameIndex);
 
         if (textOverlay) {
-          const isMobile = window.innerWidth < 768;
-          const textOffset = isMobile ? 0 : -scrollTop * 0.02;
-          textOverlay.style.opacity = String(Math.max(1 - progress * 3, 0));
-          textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
+          const isMobileViewport = window.innerWidth < 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+          if (isMobileViewport) {
+            textOverlay.style.opacity = '0';
+            textOverlay.style.display = 'none';
+          } else {
+            textOverlay.style.display = 'block';
+            const textOffset = -scrollTop * 0.02;
+            const opacity = scrollTop > 0 ? '0' : '1';
+            textOverlay.style.opacity = opacity;
+            textOverlay.style.transform = `translate3d(-50%, calc(-50% + ${textOffset}px), 0)`;
+          }
         }
 
         rafPending = false;
@@ -233,7 +252,7 @@ export default function Hero() {
         <div
           id="hero-text-overlay"
           ref={textOverlayRef}
-          className="absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none"
+          className={`absolute top-[calc(50%-45px)] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] text-center w-[90%] max-w-[600px] transition-opacity duration-100 pointer-events-none ${isMobileDevice ? 'hidden opacity-0' : ''}`}
           style={{ willChange: 'transform' }}
         >
           <img
