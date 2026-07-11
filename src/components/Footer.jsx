@@ -17,16 +17,16 @@ export default function Footer() {
             
             {/* Column 1: Brand & Logo */}
             <div className="flex flex-col items-start md:self-center">
-              <img
-                src="/valanam-new-logo.png"
-                alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
-                style={{ height: '190px', width: 'auto' }}
-                className="mb-[12px] block"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-              <div className="w-[40px] h-[1px] bg-royalLine/15 mb-3.5"></div>
+              <div className="relative overflow-hidden rounded-full mb-[20px]" style={{ height: '160px', width: '160px' }}>
+                <img
+                  src="/valanam-new-logo.png"
+                  alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
+                  className="w-full h-full object-cover scale-[1.35]"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
               <div className="font-playfair text-[1.35rem] tracking-[0.1em] text-parchment leading-tight">
                 Valanam Kitchen
               </div>
