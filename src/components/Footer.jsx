@@ -16,12 +16,12 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-14 text-left items-start">
             
             {/* Column 1: Brand & Logo */}
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start md:self-center">
               <img
                 src="/valanam-new-logo.png"
                 alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
                 style={{ height: '120px', width: 'auto' }}
-                className="mb-2 block"
+                className="mb-[24px] block"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -29,7 +29,7 @@ export default function Footer() {
               <div className="font-playfair text-[1.35rem] tracking-[0.1em] text-parchment leading-tight">
                 Valanam Kitchen
               </div>
-              <p className="font-playfair italic text-[0.85rem] text-parchment/60 leading-relaxed mt-2 mb-4">
+              <p className="font-playfair italic text-[0.85rem] text-parchment/60 leading-relaxed mt-[12px] mb-[20px]">
                 "Where stories simmer, and flavors linger."
               </p>
               
