@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://valanam.cafe/sitemap.xml

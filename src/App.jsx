@@ -9,6 +9,7 @@ import Discover from './pages/Discover';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import Lenis from 'lenis';
+import SEO from './components/SEO';
 
 export default function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
@@ -141,6 +142,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-dark text-parchment relative font-light leading-[1.7] custom-cursor-active">
+      <SEO />
       {/* Custom Circle Cursor */}
       <CustomCursor />
 
@@ -157,6 +159,7 @@ export default function App() {
         <main className={`page-transition-wrapper ${transitionStage}`}>
           <Routes location={displayLocation}>
             <Route path="/" element={<Home />} />
+            <Route path="/story" element={<Home />} />
             <Route path="/gallery" element={<Gallery onImageClick={setLightboxImage} />} />
             <Route path="/visit" element={<Visit />} />
             <Route path="/blog" element={<Blog />} />
@@ -191,7 +194,7 @@ export default function App() {
           </span>
           <img
             src={lightboxImage}
-            alt="Enlarged gallery view"
+            alt="Valanam Kitchen cozy interior ambience and food gallery view"
             className="m-auto block max-w-[90%] max-h-[85dvh] object-contain rounded-[4px] shadow-[0_10px_40px_rgba(0,0,0,0.5)] lightbox__content"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
           />

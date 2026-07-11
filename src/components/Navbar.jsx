@@ -43,7 +43,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
       <Link to="/" className="flex items-center gap-[10px]" onClick={closeNav}>
         <img
           src="/valanam-new-logo.png"
-          alt="Valanam"
+          alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
           className="h-[80px] w-auto block"
           onError={(e) => {
             e.currentTarget.style.display = 'none';

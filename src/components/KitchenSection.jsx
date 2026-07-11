@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
 
 const DRINKS_IMAGES = [
-  { src: '/drinks/photo_1_2026-05-02_16-45-11.jpg', delay: '' },
-  { src: '/drinks/photo_2_2026-05-02_16-45-11.jpg', delay: 'reveal-d1' },
-  { src: '/drinks/photo_3_2026-05-02_16-45-11.jpg', delay: 'reveal-d2' },
-  { src: '/drinks/photo_4_2026-05-02_16-45-11.jpg', delay: '' },
-  { src: '/drinks/photo_5_2026-05-02_16-45-11.jpg', delay: 'reveal-d1' },
+  { src: '/drinks/photo_1_2026-05-02_16-45-11.jpg', delay: '', alt: 'Handcrafted iced latte served at Valanam Kitchen' },
+  { src: '/drinks/photo_2_2026-05-02_16-45-11.jpg', delay: 'reveal-d1', alt: 'Hot espresso coffee in a rustic cup at Valanam Café' },
+  { src: '/drinks/photo_3_2026-05-02_16-45-11.jpg', delay: 'reveal-d2', alt: 'Fresh cold brew coffee with ice in Hyderabad café' },
+  { src: '/drinks/photo_4_2026-05-02_16-45-11.jpg', delay: '', alt: 'Handcrafted refreshing summer mocktail at Valanam Kitchen' },
+  { src: '/drinks/photo_5_2026-05-02_16-45-11.jpg', delay: 'reveal-d1', alt: 'Pour-over specialty filter coffee preparation at Valanam' },
 ];
 
 const FOOD_IMAGES = [
-  { src: '/food/photo_1_2026-05-02_16-41-57.jpg', delay: '' },
-  { src: '/food/photo_2_2026-05-02_16-41-57.jpg', delay: 'reveal-d1' },
-  { src: '/food/photo_3_2026-05-02_16-41-57.jpg', delay: 'reveal-d2' },
-  { src: '/food/photo_4_2026-05-02_16-41-57.jpg', delay: '' },
-  { src: '/food/photo_5_2026-05-02_16-41-57.jpg', delay: 'reveal-d1' },
-  { src: '/food/photo_6_2026-05-02_16-41-57.jpg', delay: 'reveal-d2' },
-  { src: '/food/photo_7_2026-05-02_16-41-57.jpg', delay: '' },
-  { src: '/food/photo_8_2026-05-02_16-41-57.jpg', delay: 'reveal-d1' },
-  { src: '/food/photo_9_2026-05-02_16-41-57.jpg', delay: 'reveal-d2' },
-  { src: '/food/photo_10_2026-05-02_16-41-57.jpg', delay: '' },
-  { src: '/food/photo_11_2026-05-02_16-41-57.jpg', delay: 'reveal-d1' },
+  { src: '/food/photo_1_2026-05-02_16-41-57.jpg', delay: '', alt: 'Handcrafted wood-fired pizza with fresh toppings at Valanam Kitchen' },
+  { src: '/food/photo_2_2026-05-02_16-41-57.jpg', delay: 'reveal-d1', alt: 'Sourdough pizza loaded with cheese and herbs at Valanam Café' },
+  { src: '/food/photo_3_2026-05-02_16-41-57.jpg', delay: 'reveal-d2', alt: 'Delicious fresh pasta dish prepared by chef at Valanam Kitchen' },
+  { src: '/food/photo_4_2026-05-02_16-41-57.jpg', delay: '', alt: 'Homely breakfast platter with eggs, toast and salad in Hyderabad' },
+  { src: '/food/photo_5_2026-05-02_16-41-57.jpg', delay: 'reveal-d1', alt: 'Warm artisanal bread basket served with fresh butter' },
+  { src: '/food/photo_6_2026-05-02_16-41-57.jpg', delay: 'reveal-d2', alt: 'Delicious gourmet sandwich filled with fresh vegetables and cheese' },
+  { src: '/food/photo_7_2026-05-02_16-41-57.jpg', delay: '', alt: 'Warm, flaky pastries baked fresh daily in Valanam Kitchen' },
+  { src: '/food/photo_8_2026-05-02_16-41-57.jpg', delay: 'reveal-d1', alt: 'Crispy baked garlic bread slices with cheese at Valanam Cafe' },
+  { src: '/food/photo_9_2026-05-02_16-41-57.jpg', delay: 'reveal-d2', alt: 'Freshly prepared garden salad bowl with light vinaigrette' },
+  { src: '/food/photo_10_2026-05-02_16-41-57.jpg', delay: '', alt: 'Homely main course meal cooked with care at Valanam' },
+  { src: '/food/photo_11_2026-05-02_16-41-57.jpg', delay: 'reveal-d1', alt: 'Special wood-fired cheese pizza on wooden serving board' },
 ];
 
 const DESSERTS_IMAGES = [
-  { src: '/desserts/photo_4_2026-05-02_16-43-45.jpg', delay: '' },
-  { src: '/desserts/photo_5_2026-05-02_16-43-45.jpg', delay: 'reveal-d1' },
-  { src: '/desserts/photo_6_2026-05-02_16-43-45.jpg', delay: 'reveal-d2' },
-  { src: '/desserts/photo_7_2026-05-02_16-43-45.jpg', delay: '' },
+  { src: '/desserts/photo_4_2026-05-02_16-43-45.jpg', delay: '', alt: 'Decadent chocolate mud cake slice at Valanam Kitchen' },
+  { src: '/desserts/photo_5_2026-05-02_16-43-45.jpg', delay: 'reveal-d1', alt: 'Creamy baked cheesecake with blueberry compote at Valanam Cafe' },
+  { src: '/desserts/photo_6_2026-05-02_16-43-45.jpg', delay: 'reveal-d2', alt: 'Soft hot chocolate brownie served warm at Valanam' },
+  { src: '/desserts/photo_7_2026-05-02_16-43-45.jpg', delay: '', alt: 'Artisanal fruit tart filled with custard and fresh berries' },
 ];
 
 export default function KitchenSection({ onImageClick }) {
@@ -76,7 +76,7 @@ export default function KitchenSection({ onImageClick }) {
               key={idx}
               className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
               src={img.src}
-              alt="Drink"
+              alt={img.alt}
               loading="lazy"
               onClick={() => onImageClick(img.src)}
             />
@@ -90,7 +90,7 @@ export default function KitchenSection({ onImageClick }) {
               key={idx}
               className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
               src={img.src}
-              alt="Food"
+              alt={img.alt}
               loading="lazy"
               onClick={() => onImageClick(img.src)}
             />
@@ -104,7 +104,7 @@ export default function KitchenSection({ onImageClick }) {
               key={idx}
               className={`reveal ${img.delay} w-full aspect-[4/5] object-cover rounded-[4px] transition-transform duration-[350ms] ease hover:scale-[1.02] cursor-pointer`}
               src={img.src}
-              alt="Dessert"
+              alt={img.alt}
               loading="lazy"
               onClick={() => onImageClick(img.src)}
             />

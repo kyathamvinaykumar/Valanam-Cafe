@@ -238,15 +238,15 @@ export default function Hero() {
         >
           <img
             src="/valanam-new-logo.png"
-            alt="Valanam Logo"
+            alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
             className="h-[65px] md:h-[160px] w-auto mx-auto mb-3 md:mb-5 block drop-shadow-none md:drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
           />
-          <div className="font-playfair text-[clamp(2.1rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-none md:drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
+          <h1 className="font-playfair text-[clamp(2.1rem,6vw,6rem)] tracking-[0.3em] text-parchment font-normal leading-[1] drop-shadow-none md:drop-shadow-[0_2px_30px_rgba(0,0,0,0.5)]">
             VALANAM
-          </div>
+          </h1>
           <div className="font-playfair italic text-[clamp(0.85rem,2vw,1.3rem)] text-amber mt-2 md:mt-4 drop-shadow-none md:drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)]">
             Where stories simmer, and flavors linger.
           </div>

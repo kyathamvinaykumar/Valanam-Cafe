@@ -1,15 +1,15 @@
 import React from 'react';
 
 const AMBIENCE_IMAGES = [
-  { src: '/ambience/photo_1_2026-05-02_16-47-07.jpg', delay: '' },
-  { src: '/ambience/photo_1_2026-05-02_17-13-27.jpg', delay: 'reveal-d1' },
-  { src: '/ambience/photo_1_2026-05-02_17-24-30.jpg', delay: 'reveal-d2' },
-  { src: '/ambience/photo_2026-05-02_17-15-45.jpg', delay: '' },
-  { src: '/ambience/photo_2_2026-05-02_16-47-07.jpg', delay: 'reveal-d1' },
-  { src: '/ambience/photo_2_2026-05-02_17-13-28.jpg', delay: 'reveal-d2' },
-  { src: '/ambience/photo_2_2026-05-02_17-24-30.jpg', delay: '' },
-  { src: '/ambience/photo_3_2026-05-02_16-47-07.jpg', delay: 'reveal-d1' },
-  { src: '/ambience/photo_4_2026-05-02_16-47-07.jpg', delay: 'reveal-d2' },
+  { src: '/ambience/photo_1_2026-05-02_16-47-07.jpg', delay: '', alt: 'Cozy café interior seating at Valanam Kitchen Hyderabad' },
+  { src: '/ambience/photo_1_2026-05-02_17-13-27.jpg', delay: 'reveal-d1', alt: 'Warm ambient lighting and rustic wooden tables at Valanam Kitchen' },
+  { src: '/ambience/photo_1_2026-05-02_17-24-30.jpg', delay: 'reveal-d2', alt: 'Beautiful aesthetic corner with plants and rustic decor in Valanam Café' },
+  { src: '/ambience/photo_2026-05-02_17-15-45.jpg', delay: '', alt: 'Detailed close-up of terracotta flooring and cozy ambience at Valanam' },
+  { src: '/ambience/photo_2_2026-05-02_16-47-07.jpg', delay: 'reveal-d1', alt: 'Charming lattice wood screen divider inside Valanam Kitchen' },
+  { src: '/ambience/photo_2_2026-05-02_17-13-28.jpg', delay: 'reveal-d2', alt: 'Comfortable seating area for guests enjoying conversations at Valanam' },
+  { src: '/ambience/photo_2_2026-05-02_17-24-30.jpg', delay: '', alt: 'Rustic brick walls and warm hanging lanterns at Valanam Kitchen Hyderabad' },
+  { src: '/ambience/photo_3_2026-05-02_16-47-07.jpg', delay: 'reveal-d1', alt: 'Homely dining table setup ready for a warm meal at Valanam Kitchen' },
+  { src: '/ambience/photo_4_2026-05-02_16-47-07.jpg', delay: 'reveal-d2', alt: 'Warm afternoon light shining into the cozy dining room of Valanam' },
 ];
 
 export default function SpaceSection({ onImageClick }) {
@@ -24,7 +24,7 @@ export default function SpaceSection({ onImageClick }) {
                 key={idx}
                 className={`reveal ${img.delay} inline-block w-full mb-2 object-cover rounded-[4px] break-inside-avoid cursor-pointer transition-transform duration-300 hover:scale-[1.02]`}
                 src={img.src}
-                alt="Ambience"
+                alt={img.alt}
                 loading="lazy"
                 onClick={() => onImageClick(img.src)}
               />

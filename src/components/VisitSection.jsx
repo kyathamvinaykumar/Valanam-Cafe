@@ -38,7 +38,7 @@ export default function VisitSection() {
             <div className="reveal aspect-[4/5] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-2 md:col-span-1 order-1 gallery-hover-card bg-clay/20">
               <img
                 src="/visit/visit_4.webp"
-                alt="Valanam Café Poster (Hero)"
+                alt="Valanam Café Poster - Come As A Stranger Leave As A Regular"
                 className="w-full h-full object-cover"
                 // Eagerly load the first hero poster image to avoid layout shifts on first print
               />
@@ -48,7 +48,7 @@ export default function VisitSection() {
             <div className="reveal reveal-d1 aspect-[3/4] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-1 order-2 lg:w-[82%] lg:justify-self-start gallery-hover-card bg-clay/20">
               <img
                 src="/visit/visit_2.webp"
-                alt="Family camera frame"
+                alt="Digital camera frame showing families enjoying meals at Valanam Kitchen Hyderabad"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -58,7 +58,7 @@ export default function VisitSection() {
             <div className="reveal reveal-d2 aspect-[4/5] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-2 md:col-span-1 order-4 md:order-3 gallery-hover-card bg-clay/20">
               <img
                 src="/visit/visit_3.webp"
-                alt="Laptop and conversation corner"
+                alt="Cozy café table with a laptop open next to a warm beverage at Valanam Kitchen"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -68,7 +68,7 @@ export default function VisitSection() {
             <div className="reveal reveal-d3 aspect-[3/4] overflow-hidden rounded-[12px] border border-royalLine/10 relative w-full col-span-1 order-3 md:order-4 gallery-hover-card bg-clay/20">
               <img
                 src="/visit/visit_1.webp"
-                alt="Dining table and music performance"
+                alt="Guests dining together during a live music performance evening at Valanam Kitchen"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

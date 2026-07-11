@@ -19,7 +19,7 @@ export default function Footer() {
             <div className="flex flex-col items-start">
               <img
                 src="/valanam-new-logo.png"
-                alt="Valanam Kitchen Logo"
+                alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
                 style={{ height: '180px', width: 'auto' }}
                 className="mb-4 block"
                 onError={(e) => {
