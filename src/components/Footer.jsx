@@ -160,12 +160,14 @@ export default function Footer() {
           </div>
 
           {/* Subtle Separator */}
-          <div className="border-t border-royalLine/10 mt-12 mb-6 max-w-[1200px] mx-auto"></div>
+          <div className="border-t border-royalLine/10 mt-12 mb-0 max-w-[1200px] mx-auto"></div>
 
-          {/* Bottom Story Signature & Copyright */}
-          <div className="flex flex-col sm:flex-row justify-between items-center max-w-[1200px] mx-auto text-center font-playfair italic text-[0.88rem] text-parchment/50 tracking-wide gap-3">
-            <div>Valanam Kitchen • Adikmet, Hyderabad</div>
-            <div className="font-inter text-[0.78rem] tracking-[0.05em] uppercase opacity-75">
+          {/* Bottom Centered Closing Section */}
+          <div className="pt-10 pb-4 flex flex-col items-center justify-center text-center w-full">
+            <div className="font-playfair italic text-[0.96rem] text-parchment/80 tracking-wide">
+              Valanam Kitchen • Adikmet, Hyderabad
+            </div>
+            <div className="mt-3 font-inter text-[0.76rem] tracking-[0.05em] uppercase text-parchment/60">
               © {new Date().getFullYear()} Valanam Kitchen. All Rights Reserved.
             </div>
           </div>
