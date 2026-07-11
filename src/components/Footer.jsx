@@ -20,7 +20,7 @@ export default function Footer() {
               <img
                 src="/valanam-new-logo.png"
                 alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
-                style={{ height: '120px', width: 'auto' }}
+                style={{ height: '150px', width: 'auto' }}
                 className="mb-[24px] block"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
