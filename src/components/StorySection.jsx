@@ -89,7 +89,7 @@ export default function StorySection() {
             "Valanam comes slowly. Gathers people. Changes the mood. Makes you stay."
           </blockquote>
           <span className="reveal block text-center mt-[48px] font-inter text-[0.78rem] tracking-[0.4em] text-parchment uppercase opacity-70">
-            A Kerala Kitchen. Hyderabad.
+            A Fabled Kitchen. Hyderabad.
           </span>
         </div>
       </section>

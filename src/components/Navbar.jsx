@@ -22,9 +22,6 @@ export default function Navbar({ isOpen, setIsOpen }) {
 
   const handleVisitClick = () => {
     closeNav();
-    if (window.location.pathname === '/visit') {
-      document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   const getNavLinkClass = ({ isActive }) =>

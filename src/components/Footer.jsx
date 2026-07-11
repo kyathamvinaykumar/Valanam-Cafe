@@ -20,8 +20,8 @@ export default function Footer() {
               <img
                 src="/valanam-new-logo.png"
                 alt="Valanam Kitchen Logo - Café and Restaurant in Hyderabad"
-                style={{ height: '180px', width: 'auto' }}
-                className="mb-4 block"
+                style={{ height: '120px', width: 'auto' }}
+                className="mb-2 block"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -113,10 +113,8 @@ export default function Footer() {
                 Visit Valanam
               </h4>
               <p className="font-playfair italic text-[0.85rem] text-parchment/70 leading-relaxed mb-3">
-                Vidya Nagar,<br />
-                Vigyanapuri Colony,<br />
-                Adikmet, Hyderabad,<br />
-                Telangana 500044
+                Vidya Nagar, Vigyanapuri Colony,<br />
+                Adikmet, Hyderabad, Telangana 500044
               </p>
               <p className="font-inter text-[0.82rem] text-amber mb-4 block">
                 <a href="tel:+919985476677" className="hover:text-parchment transition-colors duration-300">
@@ -164,9 +162,12 @@ export default function Footer() {
           {/* Subtle Separator */}
           <div className="border-t border-royalLine/10 mt-12 mb-6 max-w-[1200px] mx-auto"></div>
 
-          {/* Bottom Story Signature */}
-          <div className="text-center font-playfair italic text-[0.92rem] text-parchment/60 tracking-wide leading-none">
-            Valanam Kitchen • Adikmet, Hyderabad
+          {/* Bottom Story Signature & Copyright */}
+          <div className="flex flex-col sm:flex-row justify-between items-center max-w-[1200px] mx-auto text-center font-playfair italic text-[0.88rem] text-parchment/50 tracking-wide gap-3">
+            <div>Valanam Kitchen • Adikmet, Hyderabad</div>
+            <div className="font-inter text-[0.78rem] tracking-[0.05em] uppercase opacity-75">
+              © {new Date().getFullYear()} Valanam Kitchen. All Rights Reserved.
+            </div>
           </div>
         </div>
       </footer>

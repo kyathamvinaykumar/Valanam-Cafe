@@ -15,7 +15,7 @@ export default function Blog() {
       </div>
 
       {/* Featured Journal Article */}
-      <article className="max-w-[640px] mx-auto px-6 mt-12">
+      <article className="max-w-[640px] mx-auto px-6 mt-6">
         <header className="reveal reveal-d3 mb-10">
           <span className="font-inter text-[0.78rem] tracking-[0.25em] text-amber/80 uppercase block mb-3">
             A Note From Valanam
@@ -73,30 +73,30 @@ export default function Blog() {
             Let us bring back the joy of slow, soulful dining together.
           </p>
 
-          <div className="reveal mt-12 mb-16 text-right">
+          {/* Gentle Footnotes */}
+          <footer className="reveal border-t border-amber/10 pt-8 mt-12 mb-12">
+            <h4 className="font-playfair italic text-[1rem] text-amber/80 mb-4 tracking-[0.05em]">
+              A few gentle reminders:
+            </h4>
+            <ul className="list-none p-0 m-0 space-y-3.5">
+              <li className="font-playfair italic text-[0.95rem] text-parchment/65 leading-[1.65] flex items-start gap-2.5">
+                <span className="text-amber mt-0.5">•</span>
+                <span>Cake cutting is not permitted inside the café.</span>
+              </li>
+              <li className="font-playfair italic text-[0.95rem] text-parchment/65 leading-[1.65] flex items-start gap-2.5">
+                <span className="text-amber mt-0.5">•</span>
+                <span>We do not accept payments through Zomato or Swiggy.</span>
+              </li>
+            </ul>
+          </footer>
+
+          <div className="reveal mt-12 mb-4 text-right">
             <p className="italic text-[1.05rem] text-amber leading-none">With Love,</p>
             <p className="font-playfair text-[1.2rem] text-parchment tracking-[0.1em] uppercase mt-2.5">
               Valanam Kitchen
             </p>
           </div>
         </div>
-
-        {/* Gentle Footnotes */}
-        <footer className="reveal border-t border-amber/10 pt-8 mt-12">
-          <h4 className="font-playfair italic text-[1rem] text-amber/80 mb-4 tracking-[0.05em]">
-            A few gentle reminders:
-          </h4>
-          <ul className="list-none p-0 m-0 space-y-3.5">
-            <li className="font-playfair italic text-[0.95rem] text-parchment/65 leading-[1.65] flex items-start gap-2.5">
-              <span className="text-amber mt-0.5">•</span>
-              <span>Cake cutting is not permitted inside the café.</span>
-            </li>
-            <li className="font-playfair italic text-[0.95rem] text-parchment/65 leading-[1.65] flex items-start gap-2.5">
-              <span className="text-amber mt-0.5">•</span>
-              <span>We do not accept payments through Zomato or Swiggy.</span>
-            </li>
-          </ul>
-        </footer>
       </article>
     </div>
   );
