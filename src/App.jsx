@@ -125,6 +125,41 @@ export default function App() {
     };
   }, [displayLocation.pathname]);
 
+  // Scroll-linked text float alignment for revealed elements
+  useEffect(() => {
+    const handleTextFloat = () => {
+      const activeReveals = document.querySelectorAll(
+        'h1.reveal.in, h2.reveal.in, h3.reveal.in, p.reveal.in, blockquote.reveal.in, span.reveal.in'
+      );
+      const viewportHeight = window.innerHeight;
+      const isMobile = window.innerWidth < 768;
+      const maxOffset = isMobile ? 12 : 24;
+
+      activeReveals.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        const elementCenter = rect.top + rect.height / 2;
+        const relativePosition = elementCenter / viewportHeight;
+
+        if (rect.top < viewportHeight && rect.bottom > 0) {
+          const offset = (relativePosition - 0.5) * maxOffset;
+          item.style.transform = `translate3d(0, ${offset}px, 0)`;
+        } else {
+          item.style.transform = '';
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleTextFloat, { passive: true });
+    window.addEventListener('resize', handleTextFloat);
+    const interval = setInterval(handleTextFloat, 150);
+
+    return () => {
+      window.removeEventListener('scroll', handleTextFloat);
+      window.removeEventListener('resize', handleTextFloat);
+      clearInterval(interval);
+    };
+  }, [displayLocation.pathname]);
+
   // Lock scrolling when lightbox or mobile menu is active
   useEffect(() => {
     if (lightboxImage || isMenuOpen) {
