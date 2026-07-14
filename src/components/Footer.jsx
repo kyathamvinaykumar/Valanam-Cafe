@@ -118,8 +118,8 @@ export default function Footer() {
                 Adikmet, Hyderabad, Telangana 500044
               </p>
               <p className="font-inter text-[0.82rem] text-amber mb-4 block">
-                <a href="tel:+919985476677" className="hover:text-parchment transition-colors duration-300">
-                  +91 99854 76677
+                <a href="tel:+919676747949" className="hover:text-parchment transition-colors duration-300">
+                  +91 96767 47949
                 </a>
               </p>
               <div className="text-[0.78rem] font-inter text-parchment/50 space-y-1">
